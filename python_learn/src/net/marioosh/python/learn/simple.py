@@ -26,5 +26,5 @@ s.append("sdsds");
 s.append("sdsds");s.append("sdsds");
 for i in s: 
     print(i);
-print('kk')
+print(('kk'))
 

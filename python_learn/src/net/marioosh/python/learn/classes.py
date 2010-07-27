@@ -17,7 +17,7 @@ class KlasaA:
         return "toString: " + object.__str__(self)
     
     def test(self):
-        print('test')
+        print('test > ' + str(self))
         
 
 
