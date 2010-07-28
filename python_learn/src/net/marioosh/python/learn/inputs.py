@@ -19,10 +19,10 @@ module = os.path.basename(sys.argv[0])
 print("nazwa modulu uruchamianego: " + module)
 
 # prosty input
-answer = input("podaj odpowiedz: ")
+answer = raw_input("podaj odpowiedz: ")
 
 # pobieranie danych w czasie wykonywania skryptu
-x = input('Podaj liczbe x: ')
+x = raw_input('Podaj liczbe x: ')
 print(x)
 try:
     # tak zle (nie mozna laczyc stringow i liczb)
@@ -39,5 +39,16 @@ print("sss" + str(10))
 print(int(x) + 10)
 
 # podana wartosc musi byc liczbowa (inaczej poleci blad)
-mass_kg = int(input("podaj liczbe: " ))
+mass_kg = int(raw_input("podaj liczbe: " ))
 print(mass_kg)
+
+# input vs raw_input
+try:
+    name = input("What is your name? ")
+    print "Hello, " + name + "!"
+except:
+    # NameError: name 'asdasdas' is not defined
+    print('error!')
+
+name = raw_input("What is your name? ")
+print "Hello, " + name + "!"
