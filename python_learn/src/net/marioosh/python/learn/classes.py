@@ -19,6 +19,13 @@ class KlasaA:
     def test(self):
         print('test > ' + str(self))
         
+    # metoda statyczna nie wymaga domyslnego parametru self
+    # i mozna sie do niej odwolywac bez tworzenia obiektu
+    # np. KlasaA.separator()
+    @staticmethod
+    def separator():
+        print("-------")    
+        
 
 
 # dziedziczenie z klasy A 

@@ -15,5 +15,9 @@ f = open('test.txt','r')
 for line in f:
     print(line)
 
-
-
+# czy plik istnieje
+import os 
+if os.path.exists('c:\\zparks.Jpg'):
+    print("exist")
+else:
+    print("not exist")
