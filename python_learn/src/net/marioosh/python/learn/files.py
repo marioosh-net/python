@@ -6,7 +6,7 @@ Created on 2010-07-27
 
 # zapis do pliku
 f = open('test.txt','w')
-f.write('ala ma kotka\ni małego pieska')
+f.write('ala ma kotka\ni malego pieska')
 
 # odczyt z pliku
 f = open('test.txt','r')
