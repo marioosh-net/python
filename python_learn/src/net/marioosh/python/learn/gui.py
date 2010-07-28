@@ -7,7 +7,7 @@ Created on 2010-07-28
 # 
 # Python wrapper for Tcl/Tk,
 # 
-import tkinter as Tkinter
+import Tkinter
 app_win = Tkinter.Tk()
 # Create label ob    ject
 app_label = Tkinter.Label(app_win,text="Hello World")
