@@ -68,15 +68,34 @@ print(s.lower())
 
 string1 = 'ala ma kotka" '
 print(string1.strip())
+
+# cos jak <pre> w html
+print ('''
+ Użytkowanie: cienias [OPCJE]
+     -h                        Pokaż ten opis poleceń
+     -H nazwaserwera      Nazwa serwera, z którym chcesz się połączyć
+''')
+
+# powielanie
+print(5*'dupa,')
+
+# string jako tablica (nie mozna zmieniac stringa: x[0] = 'B' ZLE! ) 
+x = 'KOTEK'
+print(x[0])
+print(x[1:])
+
 Log.separator()
 
 #
 # listy
 #
 s = [];
-s.append("sdsds");
-s.append("sdsds");
-s.append("sdsds");s.append("sdsds");
+s += ['Ala']
+s += ['Tomek']
+s += ['KASIA','ROMEk']
+i = 2
+s[i] = 'Radek'
+s.append('Wacek');
 for i in s: 
     print(i);
 print(('kk'))
