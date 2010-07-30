@@ -24,19 +24,22 @@ class AlbumMaker:
                 if os.listdir(d) == []:
                     Message.info("destination path ok")
                 else:
-                    Message.error("destination directory not empty")
-                    answer = str(raw_input('Overwrite ALL (y/n) ?: '))
-                    if not (answer == 'y' or answer == 'Y'):
+                    if not o_opt:
+                        Message.error("destination directory not empty")
                         exit()
             else:
                 Message.error("destination path is file")
                 exit()
         else:
-            try:
-                # stworz katalog docelowy
-                os.makedirs(d, mode=0755)
-            except:
-                print("can't make destination directory")
+            if c_opt:
+                try:
+                    # stworz katalog docelowy
+                    os.makedirs(d, mode=0755)
+                except:
+                    print("can't make destination directory")
+                    exit()
+            else:
+                Message.error("destination directory doesn't exist")
                 exit()
 
         self.doit()
@@ -62,21 +65,17 @@ class AlbumMaker:
                     # kopiuj plik
                     copyfile(fullSourcePath, fullDestPath)
 
-'''
 parser = argparse.ArgumentParser(description='Make WEB-ready (smaller) photos')
-parser.add_argument('-o',help='overwrite destination directory')
-parser.add_argument('-c',help='create destination directory if not exist')
+parser.add_argument('-o',help='overwrite destination directory',action='store_true')
+parser.add_argument('-c',help='create destination directory if not exist',action='store_true')
 parser.add_argument('source',help='source directory')
 parser.add_argument('destination',help='destination directory')
-#parser.add_argument(['-d','--destination'])
-parser.print_help()
-'''
-
-p = Params(1, 'syntax: album_maker [<source path>] <destination path>')
-s = p.params[0]
-if len(p.params) < 2: 
-    s = '.' 
-    d = p.params[0]
-else: d = p.params[1]
+#parser.print_help()
+args = parser.parse_args(sys.argv[1:])
+c_opt = args.c
+o_opt = args.o
+s = args.source
+d = args.destination
+print(c_opt,o_opt,s,d)
     
 a = AlbumMaker(s,d)
