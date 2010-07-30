@@ -7,41 +7,13 @@ Created on 2010-07-30
 import os, sys, mimetypes
 from utils import Message, Params
 from shutil import copyfile
-import argparse
+import argparse # parser argumentow wejsciowych
 
 class AlbumMaker:
     # resize obrazkow
     def __init__(self, sourcePath, destPath):
         self.sourcePath = sourcePath
         self.destPath = destPath
-        if os.path.exists(s):
-            Message.info("source path ok")
-        else:
-            Message.error("source path doesn't exist")
-            exit()
-        if os.path.exists(d):
-            if os.path.isdir(d):
-                if os.listdir(d) == []:
-                    Message.info("destination path ok")
-                else:
-                    if not o_opt:
-                        Message.error("destination directory not empty")
-                        exit()
-            else:
-                Message.error("destination path is file")
-                exit()
-        else:
-            if c_opt:
-                try:
-                    # stworz katalog docelowy
-                    os.makedirs(d, mode=0755)
-                except:
-                    print("can't make destination directory")
-                    exit()
-            else:
-                Message.error("destination directory doesn't exist")
-                exit()
-
         self.doit()
         
     def doit(self):
@@ -65,6 +37,7 @@ class AlbumMaker:
                     # kopiuj plik
                     copyfile(fullSourcePath, fullDestPath)
 
+# parsowanie argumentow
 parser = argparse.ArgumentParser(description='Make WEB-ready (smaller) photos')
 parser.add_argument('-o',help='overwrite destination directory',action='store_true')
 parser.add_argument('-c',help='create destination directory if not exist',action='store_true')
@@ -76,6 +49,35 @@ c_opt = args.c
 o_opt = args.o
 s = args.source
 d = args.destination
-print(c_opt,o_opt,s,d)
+
+# sprawdzanie poprawnosci podanych argumentow
+if not os.path.exists(s):
+    Message.error("source path doesn't exist")
+    exit()
     
+if os.path.exists(d):
+    if os.path.isdir(d):
+        if os.listdir(d) == []:
+            Message.info("destination path ok")
+        else:
+            if not o_opt:
+                Message.error("destination directory not empty")
+                exit()
+    else:
+        Message.error("destination path is file")
+        exit()
+else:
+    if c_opt:
+        try:
+            # stworz katalog docelowy
+            os.makedirs(d, mode=0755)
+        except:
+            print("can't make destination directory")
+            exit()
+    else:
+        Message.error("destination directory doesn't exist")
+        exit()
+
+
+# wywolanie makera :D
 a = AlbumMaker(s,d)
