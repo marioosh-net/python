@@ -8,6 +8,7 @@ import os, sys, mimetypes
 from utils import Message, Params
 from shutil import copyfile
 import argparse # parser argumentow wejsciowych
+import subprocess 
 
 class AlbumMaker:
     # resize obrazkow
@@ -31,11 +32,14 @@ class AlbumMaker:
             if not os.path.isdir(fullSourcePath):
                 mime = mimetypes.guess_type(fullSourcePath)[0]
                 if mime in ['image/jpeg', 'image/gif', 'image/pjpeg']:
-                    print(fullSourcePath),
+                    #print(fullSourcePath),
                     fullDestPath = os.path.join(self.destPath, os.path.relpath(fullSourcePath, self.sourcePath))
-                    print(fullDestPath)
+                    #print(fullDestPath)
                     # kopiuj plik
-                    copyfile(fullSourcePath, fullDestPath)
+                    # copyfile(fullSourcePath, fullDestPath)
+                    # subprocess.call("ls -l", shell=True)
+                    print('convert -quality 80 -resize 800x800' + fullSourcePath + " " + fullDestPath)
+                    
 
 # parsowanie argumentow
 parser = argparse.ArgumentParser(description='Make WEB-ready (smaller) photos')
