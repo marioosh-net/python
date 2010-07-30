@@ -6,6 +6,8 @@ Created on 2010-07-30
 
 import os, sys, mimetypes
 from utils import Message, Params
+from shutil import copyfile
+import argparse
 
 class AlbumMaker:
     # resize obrazkow
@@ -23,7 +25,9 @@ class AlbumMaker:
                     Message.info("destination path ok")
                 else:
                     Message.error("destination directory not empty")
-                    exit()                    
+                    answer = str(raw_input('Overwrite ALL (y/n) ?: '))
+                    if not (answer == 'y' or answer == 'Y'):
+                        exit()
             else:
                 Message.error("destination path is file")
                 exit()
@@ -55,6 +59,18 @@ class AlbumMaker:
                     print(fullSourcePath),
                     fullDestPath = os.path.join(self.destPath, os.path.relpath(fullSourcePath, self.sourcePath))
                     print(fullDestPath)
+                    # kopiuj plik
+                    copyfile(fullSourcePath, fullDestPath)
+
+'''
+parser = argparse.ArgumentParser(description='Make WEB-ready (smaller) photos')
+parser.add_argument('-o',help='overwrite destination directory')
+parser.add_argument('-c',help='create destination directory if not exist')
+parser.add_argument('source',help='source directory')
+parser.add_argument('destination',help='destination directory')
+#parser.add_argument(['-d','--destination'])
+parser.print_help()
+'''
 
 p = Params(1, 'syntax: album_maker [<source path>] <destination path>')
 s = p.params[0]
