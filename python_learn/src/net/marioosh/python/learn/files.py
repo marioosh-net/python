@@ -40,3 +40,16 @@ if os.path.exists('c:\\zparks.Jpg'):
     print("exist")
 else:
     print("not exist")
+    
+# cos jak find w bashu
+print("-------- like find ----------")
+import mimetypes
+path = raw_input('path: ')
+def visit(arg, dirName, fileNames):
+    for f in fileNames:
+        fullPath = os.path.normpath(os.path.join(dirName,f))
+        if not os.path.isdir(fullPath):
+            mime = mimetypes.guess_type(fullPath)[0]
+            if mime in ['image/jpeg', 'image/gif', 'image/pjpeg']:
+                print(fullPath)
+os.path.walk(path, visit, 1)
