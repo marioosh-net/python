@@ -26,6 +26,10 @@ class KlasaA:
     def separator():
         print("-------")    
         
+    # metoda prywatna 
+    # zaczyna sie od __ (ale NIE konczy __ !!) 
+    def __privateMethod(self):
+        print('this private method')
 
 
 # dziedziczenie z klasy A 
@@ -44,4 +48,8 @@ c = KlasaB('jasiek');
 print(b)
 b.test()
 a.test()
+try:
+    a.__privateMethod() # error
+except:
+    print("private method!")
                 
