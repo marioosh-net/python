@@ -5,38 +5,36 @@ Created on 2010-07-30
 '''
 
 import os, sys, mimetypes
+from utils import Message, Params
 
-class Message:
-    # wyswietlanie komunikatow
-    @staticmethod
-    def debug(m):
-        print("DEBUG: " + m)
-    @staticmethod
-    def info(m):
-        print("INFO: " + m)
-    @staticmethod
-    def error(m):
-        print("ERROR: " + m)
-        
-class Params:
-    # pobieranie parametrow
-    def __init__(self, minParams, errorMessage):
-        self.minParams = minParams
-        if len(sys.argv) <= self.minParams:
-            print(errorMessage)
-            exit()
-        self.params = sys.argv[1:]
-             
 class AlbumMaker:
     # resize obrazkow
     def __init__(self, sourcePath, destPath):
         self.sourcePath = sourcePath
         self.destPath = destPath
-        if os.path.exists(s) and os.path.exists(d):
-            Message.info("paths ok")
+        if os.path.exists(s):
+            Message.info("source path ok")
         else:
-            Message.error("paths not ok")
+            Message.error("source path doesn't exist")
             exit()
+        if os.path.exists(d):
+            if os.path.isdir(d):
+                if os.listdir(d) == []:
+                    Message.info("destination path ok")
+                else:
+                    Message.error("destination directory not empty")
+                    exit()                    
+            else:
+                Message.error("destination path is file")
+                exit()
+        else:
+            try:
+                # stworz katalog docelowy
+                os.makedirs(d, mode=0755)
+            except:
+                print("can't make destination directory")
+                exit()
+
         self.doit()
         
     def doit(self):
@@ -45,26 +43,24 @@ class AlbumMaker:
         print ("destination: " + self.destPath)
         
         # dla kazdego katalogu wywolaj metode visit
-        os.path.walk(self.sourcePath, self.__visit, 1)
+        os.path.walk(self.sourcePath, self.__process, 1)
     
-    def __visit(self, arg, dirName, fileNames):
+    def __process(self, arg, dirName, fileNames):
+        # przetworz jeden katalog
         for f in fileNames:
-            fullPath = os.path.normpath(os.path.join(dirName,f))
-            if not os.path.isdir(fullPath):
-                mime = mimetypes.guess_type(fullPath)[0]
+            fullSourcePath = os.path.normpath(os.path.join(dirName,f))
+            if not os.path.isdir(fullSourcePath):
+                mime = mimetypes.guess_type(fullSourcePath)[0]
                 if mime in ['image/jpeg', 'image/gif', 'image/pjpeg']:
-                    print(fullPath)
+                    print(fullSourcePath),
+                    fullDestPath = os.path.join(self.destPath, os.path.relpath(fullSourcePath, self.sourcePath))
+                    print(fullDestPath)
 
-p = Params(1, '''
-    syntax: album_maker [<source path>] <destination path>
-    ''')
+p = Params(1, 'syntax: album_maker [<source path>] <destination path>')
 s = p.params[0]
-if len(p.params) < 2:
-    s = '.'
+if len(p.params) < 2: 
+    s = '.' 
     d = p.params[0]
-else:
-    d = p.params[1]
+else: d = p.params[1]
     
 a = AlbumMaker(s,d)
-
-    
