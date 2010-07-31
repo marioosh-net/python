@@ -7,11 +7,17 @@ Created on 2010-07-30
 '''
 
 import os, sys, mimetypes
-from utils import Message, Params
 from shutil import copyfile
 import argparse # parser argumentow wejsciowych
 import subprocess 
 
+def debug(m):
+    print("DEBUG: " + m)
+def info(m):
+    print("INFO: " + m)
+def error(m):
+    print("ERROR: " + m)
+    
 class AlbumMaker:
     # resize obrazkow
     def __init__(self, sourcePath, destPath):
@@ -96,19 +102,19 @@ processSubdirs = args.r
 
 # sprawdzanie poprawnosci podanych argumentow
 if not os.path.exists(s):
-    Message.error("source path doesn't exist")
+    error("source path doesn't exist")
     exit()
     
 if os.path.exists(d):
     if os.path.isdir(d):
         if os.listdir(d) == []:
-            Message.info("destination path ok")
+            info("destination path ok")
         else:
             if not o_opt:
-                Message.error("destination directory not empty")
+                error("destination directory not empty")
                 exit()
     else:
-        Message.error("destination path is file")
+        error("destination path is file")
         exit()
 else:
     if c_opt:
@@ -119,7 +125,7 @@ else:
             print("can't make destination directory")
             exit()
     else:
-        Message.error("destination directory doesn't exist")
+        error("destination directory doesn't exist")
         exit()
 
 
