@@ -18,10 +18,11 @@ class AlbumMaker:
         self.doit()
         
     def doit(self):
-        print ('---------- START ----------')
+        print ('---------- START ------------------------------------')
         print ("source     : " + self.sourcePath)
         print ("destination: " + self.destPath)
-        
+        print ('-----------------------------------------------------')
+       
         # dla kazdego katalogu wywolaj metode visit
         os.path.walk(self.sourcePath, self.__process, 1)
     
@@ -29,17 +30,26 @@ class AlbumMaker:
         # przetworz jeden katalog
         for f in fileNames:
             fullSourcePath = os.path.normpath(os.path.join(dirName,f))
+            # fd = os.path.splitext(f)[0] + '_large' + os.path.splitext(f)[1]
             if not os.path.isdir(fullSourcePath):
                 mime = mimetypes.guess_type(fullSourcePath)[0]
-                if mime in ['image/jpeg', 'image/gif', 'image/pjpeg']:
+                if mime in ['image/jpeg', 'image/pjpeg']:
                     #print(fullSourcePath),
                     fullDestPath = os.path.join(self.destPath, os.path.relpath(fullSourcePath, self.sourcePath))
                     #print(fullDestPath)
                     # kopiuj plik
                     # copyfile(fullSourcePath, fullDestPath)
                     # subprocess.call("ls -l", shell=True)
-                    print('convert -quality 80 -resize 800x800' + fullSourcePath + " " + fullDestPath)
-                    
+                    x = os.path.splitext(fullDestPath)
+                    fullDestPath = x[0] + '_large' + x[-1]
+                    #print(fullDestPath);
+                    print('Processing "' + f + '" ... '),
+                    dird = os.path.dirname(fullDestPath)
+                    if not os.path.exists(dird):
+                        os.makedirs(dird, mode=0755)
+                    convert = 'convert -quality 80 -resize 800x800 ' + fullSourcePath + " " + fullDestPath
+                    subprocess.call(convert, shell=True)
+                    print('DONE')
 
 # parsowanie argumentow
 parser = argparse.ArgumentParser(description='Make WEB-ready (smaller) photos')
