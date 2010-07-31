@@ -48,8 +48,9 @@ class AlbumMaker:
                     if not os.path.exists(dird):
                         os.makedirs(dird, mode=0755)
 
-                    ps='Processing "' + f + '" ... '
-                    print(ps.ljust(70)),                    
+                    #ps='Processing "' + f + '" ... '
+                    ps='Processing "' + fullSourcePath + '" ... '
+                    print(ps.ljust(100)),                    
                     if fileSize > int(maxFileSize):
                         # resize
                         convert = 'convert -quality 80 -resize '+str(wh)+'x'+str(wh)+' "' + fullSourcePath + '" "' + fullDestPath + '"'
