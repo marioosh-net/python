@@ -34,27 +34,35 @@ class AlbumMaker:
             if not os.path.isdir(fullSourcePath):
                 mime = mimetypes.guess_type(fullSourcePath)[0]
                 if mime in ['image/jpeg', 'image/pjpeg']:
+                    
+                    fileSize = os.path.getsize(fullSourcePath)
                     #print(fullSourcePath),
                     fullDestPath = os.path.join(self.destPath, os.path.relpath(fullSourcePath, self.sourcePath))
-                    #print(fullDestPath)
-                    # kopiuj plik
-                    # copyfile(fullSourcePath, fullDestPath)
-                    # subprocess.call("ls -l", shell=True)
                     x = os.path.splitext(fullDestPath)
                     fullDestPath = x[0] + '_large' + x[-1]
-                    #print(fullDestPath);
-                    print('Processing "' + f + '" ... '),
+                    
+                    # stworz katalog docelowy jesli nie istnieje
                     dird = os.path.dirname(fullDestPath)
                     if not os.path.exists(dird):
                         os.makedirs(dird, mode=0755)
-                    convert = 'convert -quality 80 -resize 800x800 ' + fullSourcePath + " " + fullDestPath
-                    subprocess.call(convert, shell=True)
-                    print('DONE')
+
+                    ps='Processing "' + f + '" ... '
+                    print(ps.ljust(80)),                    
+                    if fileSize > int(maxFileSize):
+                        # resize
+                        convert = 'convert -quality 80 -resize 800x800 "' + fullSourcePath + '" "' + fullDestPath + '"'
+                        subprocess.call(convert, shell=True)
+                        print('DONE (resized)'.ljust(20))
+                    else:
+                        # kopiuj plik
+                        copyfile(fullSourcePath, fullDestPath)
+                        print('DONE (copied)'.ljust(20))
 
 # parsowanie argumentow
 parser = argparse.ArgumentParser(description='Make WEB-ready (smaller) photos')
 parser.add_argument('-o',help='overwrite destination directory',action='store_true')
 parser.add_argument('-c',help='create destination directory if not exist',action='store_true')
+parser.add_argument('-s',help='max file size (larger will be resized)',default=200000)
 parser.add_argument('source',help='source directory')
 parser.add_argument('destination',help='destination directory')
 #parser.print_help()
@@ -63,6 +71,7 @@ c_opt = args.c
 o_opt = args.o
 s = args.source
 d = args.destination
+maxFileSize = args.s
 
 # sprawdzanie poprawnosci podanych argumentow
 if not os.path.exists(s):
