@@ -10,6 +10,7 @@ import os, sys, mimetypes
 from shutil import copyfile
 import argparse # parser argumentow wejsciowych
 import subprocess 
+import hashlib
 
 def debug(m):
     print("DEBUG: " + m)
@@ -52,7 +53,11 @@ class AlbumMaker:
             if not os.path.isdir(fullSourcePath):
                 mime = mimetypes.guess_type(fullSourcePath)[0]
                 if mime in ['image/jpeg', 'image/pjpeg']:
-                    
+
+                    # m = hashlib.md5()
+                    # m.update(open(fullSourcePath).read(10485760))
+                    # md5sum = m.hexdigest()
+                                        
                     fileSize = os.path.getsize(fullSourcePath)
                     #print(fullSourcePath),
                     fullDestPath = os.path.join(self.destPath, os.path.relpath(fullSourcePath, self.sourcePath))
