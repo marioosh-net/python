@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 '''
 Created on 2010-07-30
 
@@ -47,10 +49,10 @@ class AlbumMaker:
                         os.makedirs(dird, mode=0755)
 
                     ps='Processing "' + f + '" ... '
-                    print(ps.ljust(80)),                    
+                    print(ps.ljust(70)),                    
                     if fileSize > int(maxFileSize):
                         # resize
-                        convert = 'convert -quality 80 -resize 800x800 "' + fullSourcePath + '" "' + fullDestPath + '"'
+                        convert = 'convert -quality 80 -resize '+wh+'x'+wh+' "' + fullSourcePath + '" "' + fullDestPath + '"'
                         subprocess.call(convert, shell=True)
                         print('DONE (resized)'.ljust(20))
                     else:
@@ -62,7 +64,8 @@ class AlbumMaker:
 parser = argparse.ArgumentParser(description='Make WEB-ready (smaller) photos')
 parser.add_argument('-o',help='overwrite destination directory',action='store_true')
 parser.add_argument('-c',help='create destination directory if not exist',action='store_true')
-parser.add_argument('-s',help='max file size (larger will be resized)',default=200000)
+parser.add_argument('-s',help='max file size (larger will be resized)',default=200000,type=int,metavar='filesize')
+parser.add_argument('-wh',help='width (and height) destination image',default=800,type=int,metavar='pixels')
 parser.add_argument('source',help='source directory')
 parser.add_argument('destination',help='destination directory')
 #parser.print_help()
@@ -71,6 +74,7 @@ c_opt = args.c
 o_opt = args.o
 s = args.source
 d = args.destination
+wh = args.wh
 maxFileSize = args.s
 
 # sprawdzanie poprawnosci podanych argumentow
