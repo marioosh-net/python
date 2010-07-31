@@ -52,7 +52,7 @@ class AlbumMaker:
                     print(ps.ljust(70)),                    
                     if fileSize > int(maxFileSize):
                         # resize
-                        convert = 'convert -quality 80 -resize '+wh+'x'+wh+' "' + fullSourcePath + '" "' + fullDestPath + '"'
+                        convert = 'convert -quality 80 -resize '+str(wh)+'x'+str(wh)+' "' + fullSourcePath + '" "' + fullDestPath + '"'
                         subprocess.call(convert, shell=True)
                         print('DONE (resized)'.ljust(20))
                     else:
