@@ -21,12 +21,22 @@ class AlbumMaker:
         
     def doit(self):
         print ('---------- START ------------------------------------')
-        print ("source     : " + self.sourcePath)
-        print ("destination: " + self.destPath)
+        print ("source       : " + self.sourcePath)
+        print ("destination  : " + self.destPath)
+        print ("quality      : " + str(quality))
+        print ("width/height : " + str(wh))
+        print ("with subdirs : " + str(processSubdirs))
         print ('-----------------------------------------------------')
+        self.resized = 0
+        self.copied = 0
        
-        # dla kazdego katalogu wywolaj metode visit
-        os.path.walk(self.sourcePath, self.__process, 1)
+        if processSubdirs:
+            # dla kazdego katalogu wywolaj metode visit
+            os.path.walk(self.sourcePath, self.__process, 1)
+        else:
+            self.__process(1, self.sourcePath, os.listdir(self.sourcePath))
+        
+        print ('Processed: ' + str(self.resized+self.copied) + ' ('+'copied: ' + str(self.copied)+', resized: ' + str(self.resized) + ')')
     
     def __process(self, arg, dirName, fileNames):
         # przetworz jeden katalog
@@ -53,13 +63,15 @@ class AlbumMaker:
                     print(ps.ljust(100)),                    
                     if fileSize > int(maxFileSize):
                         # resize
-                        convert = 'convert -quality 80 -resize '+str(wh)+'x'+str(wh)+' "' + fullSourcePath + '" "' + fullDestPath + '"'
+                        convert = 'convert -quality '+str(quality)+' -resize '+str(wh)+'x'+str(wh)+' "' + fullSourcePath + '" "' + fullDestPath + '"'
                         subprocess.call(convert, shell=True)
                         print('DONE (resized)'.ljust(20))
+                        self.resized += 1
                     else:
                         # kopiuj plik
                         copyfile(fullSourcePath, fullDestPath)
                         print('DONE (copied)'.ljust(20))
+                        self.copied += 1
 
 # parsowanie argumentow
 parser = argparse.ArgumentParser(description='Make WEB-ready (smaller) photos')
@@ -67,7 +79,9 @@ parser.add_argument('-o',help='overwrite destination directory',action='store_tr
 parser.add_argument('-c',help='create destination directory if not exist',action='store_true')
 parser.add_argument('-s',help='max file size (larger will be resized)',default=200000,type=int,metavar='filesize')
 parser.add_argument('-wh',help='width (and height) destination image',default=800,type=int,metavar='pixels')
+parser.add_argument('-q',help='quality of destination image',default=80,type=int,metavar='value')
 parser.add_argument('source',help='source directory')
+parser.add_argument('-r',help='read all files under each directory, recursively',action='store_true')
 parser.add_argument('destination',help='destination directory')
 #parser.print_help()
 args = parser.parse_args(sys.argv[1:])
@@ -77,6 +91,8 @@ s = args.source
 d = args.destination
 wh = args.wh
 maxFileSize = args.s
+quality = args.q
+processSubdirs = args.r 
 
 # sprawdzanie poprawnosci podanych argumentow
 if not os.path.exists(s):
