@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: iso-8859-2 -*-
 
 '''
 Created on 2010-07-30
@@ -11,6 +12,7 @@ from shutil import copyfile
 import argparse # parser argumentow wejsciowych
 import subprocess 
 import hashlib
+import sqlite3
 
 def debug(m):
     print("DEBUG: " + m)
@@ -36,12 +38,17 @@ class AlbumMaker:
         print ('-----------------------------------------------------')
         self.resized = 0
         self.copied = 0
+        self.conn = sqlite3.connect(dbfile)
+        c = self.conn.cursor()
+        try: c.execute('create table photos (id INTEGER PRIMARY KEY, hash text, path text)')
+        except: print('tabela ju¿ istnieje');
        
         if processSubdirs:
             # dla kazdego katalogu wywolaj metode visit
             os.path.walk(self.sourcePath, self.__process, 1)
         else:
             self.__process(1, self.sourcePath, os.listdir(self.sourcePath))
+        self.conn.close()
         
         print ('Processed: ' + str(self.resized+self.copied) + ' ('+'copied: ' + str(self.copied)+', resized: ' + str(self.resized) + ')')
     
@@ -54,9 +61,9 @@ class AlbumMaker:
                 mime = mimetypes.guess_type(fullSourcePath)[0]
                 if mime in ['image/jpeg', 'image/pjpeg']:
 
-                    # m = hashlib.md5()
-                    # m.update(open(fullSourcePath).read(10485760))
-                    # md5sum = m.hexdigest()
+                    m = hashlib.md5()
+                    m.update(open(fullSourcePath).read(10485760))
+                    md5sum = m.hexdigest()
                                         
                     fileSize = os.path.getsize(fullSourcePath)
                     #print(fullSourcePath),
@@ -78,6 +85,9 @@ class AlbumMaker:
                         subprocess.call(convert, shell=True)
                         print('DONE (resized)'.ljust(20))
                         self.resized += 1
+                        c = self.conn.cursor()
+                        c.execute("insert into photos (hash, path) values ('"+md5sum+"','"+fullSourcePath+"')");
+                        self.conn.commit();
                     else:
                         # kopiuj plik
                         copyfile(fullSourcePath, fullDestPath)
@@ -91,6 +101,7 @@ parser.add_argument('-c',help='create destination directory if not exist',action
 parser.add_argument('-s',help='max file size (larger will be resized)',default=200000,type=int,metavar='filesize')
 parser.add_argument('-wh',help='width (and height) destination image',default=800,type=int,metavar='pixels')
 parser.add_argument('-q',help='quality of destination image',default=80,type=int,metavar='value')
+parser.add_argument('-d','--dbfile',help='sqlite db file',default='album_maker.sqlite',type=str,metavar='file')
 parser.add_argument('source',help='source directory')
 parser.add_argument('-r',help='read all files under each directory, recursively',action='store_true')
 parser.add_argument('destination',help='destination directory')
@@ -103,7 +114,8 @@ d = args.destination
 wh = args.wh
 maxFileSize = args.s
 quality = args.q
-processSubdirs = args.r 
+processSubdirs = args.r
+dbfile = args.dbfile 
 
 # sprawdzanie poprawnosci podanych argumentow
 if not os.path.exists(s):
