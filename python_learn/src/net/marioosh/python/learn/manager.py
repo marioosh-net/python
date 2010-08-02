@@ -28,7 +28,7 @@ try:
                 repopass = args.params[2]
                 repopath = os.path.join(SVNDIR,reponame)
                 if not os.path.exists(repopath):
-                    os.chdir(repopath)
+                    os.chdir(SVNDIR)
                     subprocess.call('svnadmin create '+reponame+'; chown -R '+USER+':svn2 '+reponame+'; chmod -R g+w,o-r,o-x '+reponame, shell=True)
                     # konfiguracja
                     repoconfpath = os.path.join(repopath,'conf/svnserve.conf')
