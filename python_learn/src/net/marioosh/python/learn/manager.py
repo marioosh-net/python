@@ -52,9 +52,11 @@ try:
                 if reponame != None:
                     repopath = os.path.join(SVNDIR,reponame)
                     if os.path.exists(repopath):
-                        tn = raw_input('deleting repo "'+reponame+'" - are you sure ? (y/n) ? ')
-                        if tn == 'y' or tn == 'Y':
-                            shutil.rmtree(repopath)
+                        stat = os.stat(repopath)
+                        if stat.st_uid == os.geteuid():
+                            tn = raw_input('deleting repo "'+reponame+'" - are you sure ? (y/n) ? ')
+                            if tn == 'y' or tn == 'Y':
+                                shutil.rmtree(repopath)
                     else:
                         print ('error: repo "'+reponame+ '" doesn\'t exist')
             else:
