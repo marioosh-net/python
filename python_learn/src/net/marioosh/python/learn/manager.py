@@ -27,7 +27,7 @@ if  args.subsystem == 'svn':
         if reponame != None:
             repopath = os.path.join(SVNDIR,reponame)
             if not os.path.exists(repopath):
-                subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+USER+':svn2 '+reponame+'; chmod -R g+w '+reponame, shell=True)            
+                subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+USER+':svn2 '+reponame+'; chmod -R g+w,o-r,o-x '+reponame, shell=True)            
             else:
                 print ('repo "'+reponame+ '" istnieje!')
         else:
