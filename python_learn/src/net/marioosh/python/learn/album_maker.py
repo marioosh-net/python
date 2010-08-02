@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: iso-8859-2 -*-
+# -*- coding: utf-8 -*-
 
 '''
 Created on 2010-07-30
@@ -41,7 +41,7 @@ class AlbumMaker:
         self.conn = sqlite3.connect(dbfile)
         c = self.conn.cursor()
         try: c.execute('create table photos (id INTEGER PRIMARY KEY, hash text, path text)')
-        except: print('tabela ju¿ istnieje');
+        except: print('tabela juï¿½ istnieje');
        
         if processSubdirs:
             # dla kazdego katalogu wywolaj metode visit
@@ -64,6 +64,7 @@ class AlbumMaker:
                     m = hashlib.md5()
                     m.update(open(fullSourcePath).read(10485760))
                     md5sum = m.hexdigest()
+                    print(md5sum)
                                         
                     fileSize = os.path.getsize(fullSourcePath)
                     #print(fullSourcePath),
