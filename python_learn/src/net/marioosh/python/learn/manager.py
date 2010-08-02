@@ -10,24 +10,27 @@ import os
 import subprocess
 import getpass
 
-SVNDIR='c:\moje'
+SVNDIR='/var/svn2'
 
 a = argparse.ArgumentParser(prog='manager')
-a.add_argument('subsystem', choices=['svn','mysql','postgres'])
+a.add_argument('subsystem', help='subsystem', choices=['svn','mysql','postgres'])
 a.add_argument('command', help='komenda', choices=['add','delete','list'])
 a.add_argument('params', help='parametry dodatkowe', nargs='?')
 args = a.parse_args(sys.argv[1:])
 
+user = getpass.getuser()
 if  args.subsystem == 'svn':
     if   args.command == 'add':
         # dodawanie repo
         reponame = args.params
-        repopath = os.path.join(SVNDIR,reponame)
-        if not os.path.exists(repopath):
-            user = getpass.getuser()
-            subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+user+':svn2 '+reponame+'; chmod -R g+w '+reponame, shell=True)            
+        if reponame != None:
+            repopath = os.path.join(SVNDIR,reponame)
+            if not os.path.exists(repopath):
+                subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+user+':svn2 '+reponame+'; chmod -R g+w '+reponame, shell=True)            
+            else:
+                print ('repo '+reponame+ ' istnieje!')
         else:
-            print ('repo '+reponame+ ' istnieje!')
+            print ('podaj nazwe repo')
     elif args.command == 'delete':
         print 'delete repo'
     elif args.command == 'list':
@@ -47,4 +50,3 @@ elif args.subsystem == 'postgres':
     elif args.command == 'delete':
         print 'delete postgres'
 
-print(args.params)
