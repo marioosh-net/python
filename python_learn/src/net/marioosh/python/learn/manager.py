@@ -12,8 +12,8 @@ USER = getpass.getuser()
 
 parser = argparse.ArgumentParser(prog='manager',description='System Manager')
 parser.add_argument('subsystem', help='subsystem', choices=['svn','mysql','postgres'])
-parser.add_argument('command', help='komenda', choices=['add','delete','list'])
-parser.add_argument('params', help='parametry', nargs='*')
+parser.add_argument('command', help='command', choices=['add','delete','list'])
+parser.add_argument('params', help='parameters', nargs='*')
 args = parser.parse_args(sys.argv[1:])
 
 try:
@@ -40,21 +40,22 @@ try:
                     f.flush()
                     f.close()                
                 else:
-                    print ('error: repo "'+reponame+ '" istnieje!')
+                    print ('error: repo "'+reponame+ '" exists')
             else:
                 print ('usage: manager svn add <reponame> <repouser> <repopass>')
                 
         elif args.command == 'delete':
             # usuwanie repo
-            reponame = args.params[0]
-            if reponame != None:
-                repopath = os.path.join(SVNDIR,reponame)
-                if os.path.exists(repopath):
-                    tn = raw_input('Potwierdzasz usuniêcie repo "'+reponame+'" (t/n) ? ')
-                    if tn == 't' or tn == 'T':
-                        subprocess.call('cd '+SVNDIR+'; rm -rf '+reponame, shell=True)            
-                else:
-                    print ('error: repo "'+reponame+ '" NIE istnieje!')
+            if len(args.params) > 0:
+                reponame = args.params[0]
+                if reponame != None:
+                    repopath = os.path.join(SVNDIR,reponame)
+                    if os.path.exists(repopath):
+                        tn = raw_input('deleting repo "'+reponame+'" - are you sure ? (y/n) ? ')
+                        if tn == 'y' or tn == 'Y':
+                            subprocess.call('cd '+SVNDIR+'; rm -rf '+reponame, shell=True)            
+                    else:
+                        print ('error: repo "'+reponame+ '" doesn\'t exist')
             else:
                 print ('usage: manager svn delete <reponame>')
                        
