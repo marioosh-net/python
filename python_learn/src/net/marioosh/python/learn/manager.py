@@ -8,8 +8,9 @@ import argparse
 import sys
 import os
 import subprocess
+import getpass
 
-SVNDIR='/var/svn2'
+SVNDIR='c:\moje'
 
 a = argparse.ArgumentParser(prog='manager')
 a.add_argument('subsystem', choices=['svn','mysql','postgres'])
@@ -23,13 +24,18 @@ if  args.subsystem == 'svn':
         reponame = args.params
         repopath = os.path.join(SVNDIR,reponame)
         if not os.path.exists(repopath):
-            subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame, shell=True)            
+            user = getpass.getuser()
+            subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+user+':svn2 '+reponame+'; chmod -R g+w '+reponame, shell=True)            
         else:
             print ('repo '+reponame+ ' istnieje!')
     elif args.command == 'delete':
         print 'delete repo'
     elif args.command == 'list':
-        print (os.listdir(SVNDIR))
+        repolist = os.listdir(SVNDIR)
+        for repo in repolist:
+            if os.path.isdir(os.path.join(SVNDIR,repo)):
+                print(repo)
+        
 elif args.subsystem == 'mysql':
     if   args.command == 'add':
         print 'add mysql'
