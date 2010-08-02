@@ -1,12 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
-Created on 2010-08-02
-
-@author: marioosh
-'''
-import sqlite3
 import argparse
 import sys
 import os
@@ -89,5 +83,5 @@ try:
             None
 
 except OSError as (errno, strerror):
-  print(strerror);
+    print(strerror);
 
