@@ -11,14 +11,13 @@ import subprocess
 import getpass
 
 SVNDIR='/var/svn2'
+USER = getpass.getuser()
 
 a = argparse.ArgumentParser(prog='manager')
 a.add_argument('subsystem', help='subsystem', choices=['svn','mysql','postgres'])
 a.add_argument('command', help='komenda', choices=['add','delete','list'])
 a.add_argument('params', help='parametry dodatkowe', nargs='?')
 args = a.parse_args(sys.argv[1:])
-
-user = getpass.getuser()
 
 # osbluga svn
 if  args.subsystem == 'svn':
@@ -28,7 +27,7 @@ if  args.subsystem == 'svn':
         if reponame != None:
             repopath = os.path.join(SVNDIR,reponame)
             if not os.path.exists(repopath):
-                subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+user+':svn2 '+reponame+'; chmod -R g+w '+reponame, shell=True)            
+                subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+USER+':svn2 '+reponame+'; chmod -R g+w '+reponame, shell=True)            
             else:
                 print ('repo "'+reponame+ '" istnieje!')
         else:
