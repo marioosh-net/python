@@ -28,7 +28,8 @@ try:
                 repopass = args.params[2]
                 repopath = os.path.join(SVNDIR,reponame)
                 if not os.path.exists(repopath):
-                    subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+USER+':svn2 '+reponame+'; chmod -R g+w,o-r,o-x '+reponame, shell=True)
+                    os.chdir(repopath)
+                    subprocess.call('svnadmin create '+reponame+'; chown -R '+USER+':svn2 '+reponame+'; chmod -R g+w,o-r,o-x '+reponame, shell=True)
                     # konfiguracja
                     repoconfpath = os.path.join(repopath,'conf/svnserve.conf')
                     repopasspath = os.path.join(repopath,'conf/passwd')
@@ -57,6 +58,8 @@ try:
                             tn = raw_input('deleting repo "'+reponame+'" - are you sure ? (y/n) ? ')
                             if tn == 'y' or tn == 'Y':
                                 shutil.rmtree(repopath)
+                        else:
+                            print ('Permission denied')
                     else:
                         print ('error: repo "'+reponame+ '" doesn\'t exist')
             else:
