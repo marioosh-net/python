@@ -6,6 +6,7 @@ import sys
 import os
 import subprocess
 import getpass
+import shutil
 
 SVNDIR='/var/svn2'
 USER = getpass.getuser()
@@ -53,7 +54,7 @@ try:
                     if os.path.exists(repopath):
                         tn = raw_input('deleting repo "'+reponame+'" - are you sure ? (y/n) ? ')
                         if tn == 'y' or tn == 'Y':
-                            subprocess.call('cd '+SVNDIR+'; rm -rf '+reponame, shell=True)            
+                            shutil.rmtree(repopath)
                     else:
                         print ('error: repo "'+reponame+ '" doesn\'t exist')
             else:
