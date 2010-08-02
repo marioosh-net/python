@@ -19,6 +19,8 @@ a.add_argument('params', help='parametry dodatkowe', nargs='?')
 args = a.parse_args(sys.argv[1:])
 
 user = getpass.getuser()
+
+# osbluga svn
 if  args.subsystem == 'svn':
     if   args.command == 'add':
         # dodawanie repo
@@ -28,25 +30,42 @@ if  args.subsystem == 'svn':
             if not os.path.exists(repopath):
                 subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+user+':svn2 '+reponame+'; chmod -R g+w '+reponame, shell=True)            
             else:
-                print ('repo '+reponame+ ' istnieje!')
+                print ('repo "'+reponame+ '" istnieje!')
         else:
             print ('podaj nazwe repo')
+            
     elif args.command == 'delete':
-        print 'delete repo'
+        # usuwanie repo
+        reponame = args.params
+        if reponame != None:
+            repopath = os.path.join(SVNDIR,reponame)
+            if os.path.exists(repopath):
+                subprocess.call('cd '+SVNDIR+'; rm -rf '+reponame, shell=True)            
+            else:
+                print ('repo "'+reponame+ '" NIE istnieje!')
+        else:
+            print ('podaj nazwe repo')
+                    
     elif args.command == 'list':
         repolist = os.listdir(SVNDIR)
         for repo in repolist:
             if os.path.isdir(os.path.join(SVNDIR,repo)):
                 print(repo)
-        
+
+# osbluga mysql        
 elif args.subsystem == 'mysql':
     if   args.command == 'add':
-        print 'add mysql'
+        None
     elif args.command == 'delete':
-        print 'delete mysql'
+        None
+    elif args.command == 'list':
+        None
+        
+# osbluga postgres        
 elif args.subsystem == 'postgres':
     if   args.command == 'add':
-        print 'add postgres'
+        None
     elif args.command == 'delete':
-        print 'delete postgres'
-
+        None
+    elif args.command == 'list':
+        None
