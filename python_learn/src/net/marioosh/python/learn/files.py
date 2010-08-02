@@ -32,7 +32,24 @@ print("------------------")
 # zapis do pliku
 #
 f = open('test.txt','w')
-f.write('ala ma kotka\ni malego pieska')
+f.write('ala ma kotka\ni malego pieska\noraz misia\noraz pysia')
+f.close()
+
+# otwarcie do ponownego zapisu nadpisuje caly plik!! (tworzy nowy jesli istnieje!!!)
+f = open('test.txt','w')
+# skok na poczatek pliku
+f.seek(0)
+f.write('PIERWSZA LINIA\n')
+f.write('Druga linia\n')
+if True:
+    f.write('''
+[general]
+anon-access = none
+auth-access = write
+password-db = passwd
+    ''')
+f.flush()
+f.close()
 
 # czy plik istnieje
 import os 

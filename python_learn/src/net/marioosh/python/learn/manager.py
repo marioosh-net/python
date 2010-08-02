@@ -13,11 +13,11 @@ import getpass
 SVNDIR='/var/svn2'
 USER = getpass.getuser()
 
-a = argparse.ArgumentParser(prog='manager')
-a.add_argument('subsystem', help='subsystem', choices=['svn','mysql','postgres'])
-a.add_argument('command', help='komenda', choices=['add','delete','list'])
-a.add_argument('params', help='parametry dodatkowe', nargs='?')
-args = a.parse_args(sys.argv[1:])
+parser = argparse.ArgumentParser(prog='manager')
+parser.add_argument('subsystem', help='subsystem', choices=['svn','mysql','postgres'])
+parser.add_argument('command', help='komenda', choices=['add','delete','list'])
+parser.add_argument('params', help='parametry dodatkowe', nargs='*')
+args = parser.parse_args(sys.argv[1:])
 
 # osbluga svn
 if  args.subsystem == 'svn':
@@ -27,7 +27,18 @@ if  args.subsystem == 'svn':
         if reponame != None:
             repopath = os.path.join(SVNDIR,reponame)
             if not os.path.exists(repopath):
-                subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+USER+':svn2 '+reponame+'; chmod -R g+w,o-r,o-x '+reponame, shell=True)            
+                subprocess.call('cd '+SVNDIR+'; svnadmin create '+reponame+'; chown -R '+USER+':svn2 '+reponame+'; chmod -R g+w,o-r,o-x '+reponame, shell=True)
+                # konfiguracja
+                repoconfpath = os.path.join(repopath,'conf/svnserve.conf')
+                repopasspath = os.path.join(repopath,'conf/passwd')
+                f = open(repoconfpath,'w')
+                f.write('[general]\nanon-access = none\nauth-access = write\npassword-db = passwd\n')
+                f.flush()
+                f.close()            
+                f = open(repopasspath,'w')
+                f.write('[users]\nuser=pass\n')
+                f.flush()
+                f.close()                
             else:
                 print ('repo "'+reponame+ '" istnieje!')
         else:
