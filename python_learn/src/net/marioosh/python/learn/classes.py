@@ -53,3 +53,26 @@ try:
 except:
     print("private method!")
                 
+
+
+class A:
+    def __init__(self):
+        print('kontruktor klasy A')
+    
+class B(A):
+    def __init__(self):
+        # tutaj trzeba wywolac jawnie superkontruktor
+        A.__init__(self)
+        print('konstruktor klasy B')
+        
+class C(A):
+    # nie ma zdeklarowanego konstruktora, wiec bedzie wywolany domyslny
+    # ktory tez wywola superkontruktor klasy bazowej
+    None
+
+print('----')
+a = A()
+print('----')
+b = B()
+print('----')
+c = C()
