@@ -22,15 +22,7 @@ for e in l:
     #spanFirst = e.find('span', attrs={'class': 'first'});
     #print(spanFirst),
     a = e.findAll('a');
-    print(a[0].string.lstrip() + " : "),
-    print(a[1].string.lstrip())
-#    for k in a:
-#        print(k.string),
-#    print ''
-    # print(e.findAll('a'))
-    #print(e.find('span', attrs={'class': 'first'}).string), 
-    #print(e.find('a').string)
+    print(a[0].string.lstrip().rstrip() + " - "),
+    print(a[1].string.lstrip().rstrip())
 
-# soup2 = BeautifulSoup(str(lista))
-# print str(soup2.prettify())
 
