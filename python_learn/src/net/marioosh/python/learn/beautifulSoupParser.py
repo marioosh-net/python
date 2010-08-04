@@ -19,10 +19,11 @@ lista = soup.find('div', attrs={'class': 'lista'})
 # znajdz wszystkie
 l = lista.findAll('div', attrs={'class': 'name'})
 for e in l:
-    #spanFirst = e.find('span', attrs={'class': 'first'});
-    #print(spanFirst),
-    a = e.findAll('a');
-    print(a[0].string.strip() + " - "),
-    print(a[1].string.strip())
-
-
+    
+    # artist
+    spanFirst = e.find('span', attrs={'class': 'first'});
+    x = spanFirst.findAll('a')
+    for i in x:
+        print(i.string.strip()+','),
+    # title
+    print(" - " + spanFirst.findNextSibling('span').find('a').string.strip())
