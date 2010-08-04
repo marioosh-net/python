@@ -31,6 +31,10 @@ class MyParser (HTMLParser):
     
     def handle_starttag(self, tag, attrs):
         self.startTag = tag
+        if tag == 'div' and attrs:
+            for atr in attrs:
+                atrName = atr[0]
+                atrValue = atr[1]
         
     def handle_data(self, data):
         if(self.startTag == 'title'):
