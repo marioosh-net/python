@@ -23,7 +23,11 @@ for e in l:
     # artist
     spanFirst = e.find('span', attrs={'class': 'first'});
     x = spanFirst.findAll('a')
+    j = 0
     for i in x:
-        print(i.string.strip()+','),
+        j += 1
+        print(i.string.strip()),
+        if len(x) > 1 and j < len(x):
+            print(','),
     # title
     print(" - " + spanFirst.findNextSibling('span').find('a').string.strip())
