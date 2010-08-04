@@ -22,7 +22,7 @@ for e in l:
     #spanFirst = e.find('span', attrs={'class': 'first'});
     #print(spanFirst),
     a = e.findAll('a');
-    print(a[0].string.lstrip().rstrip() + " - "),
-    print(a[1].string.lstrip().rstrip())
+    print(a[0].string.strip() + " - "),
+    print(a[1].string.strip())
 
 
