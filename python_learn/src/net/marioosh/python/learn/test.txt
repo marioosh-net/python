@@ -1,8 +1,0 @@
-PIERWSZA LINIA
-Druga linia
-
-[general]
-anon-access = none
-auth-access = write
-password-db = passwd
-    
