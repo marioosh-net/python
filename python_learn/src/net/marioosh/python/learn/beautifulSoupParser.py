@@ -7,8 +7,8 @@ Created on 2010-08-04
 from BeautifulSoup import BeautifulSoup
 from urllib import urlopen
 
-req = urlopen('http://www.eska.pl/goraca20')
-soup = BeautifulSoup(req.read())
+url = urlopen('http://www.eska.pl/goraca20')
+soup = BeautifulSoup(url.read())
 # print soup.prettify()
 titleTag = soup.html.head.title
 # print(str(titleTag))

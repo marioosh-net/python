@@ -7,8 +7,8 @@ Created on 2010-08-04
 from BeautifulSoup import BeautifulSoup
 from urllib import urlopen
 
-req = urlopen('http://www.rmf.fm/au/?a=poplista')
-soup = BeautifulSoup(req.read())
+url = urlopen('http://www.rmf.fm/au/?a=poplista')
+soup = BeautifulSoup(url.read())
 titleTag = soup.html.head.title
 print(str(titleTag.string) + '<br/><br/>')
 
