@@ -9,18 +9,23 @@ from urllib import urlopen
 
 req = urlopen('http://www.rmf.fm/au/?a=poplista')
 soup = BeautifulSoup(req.read())
-# print soup.prettify()
 titleTag = soup.html.head.title
-# print(str(titleTag))
-print(str(titleTag.string))
+print(str(titleTag.string) + '<br/><br/>')
 
-# znajdz pierwszy pasujacy
 lista = soup.find('td', attrs={'width': '690'})
-# znajdz wszystkie
+
+# top 3
 l1 = lista.find('table', attrs={'class': 'poplista-toptable'})
-print (l1);
-print ('---------------');
+for tr in l1.findAll('tr'):
+    print('<span style="font-weight: bold;">' + tr.contents[2].next.string.strip() + '</span> -'),
+    print(tr.contents[2].next.nextSibling.nextSibling.string.strip() + '<br/>')
+
+# reszta
 l2 = l1.findNextSibling('table')
-print(l2);
+for tr in l2.contents:
+    drugiTd = tr.contents[1];
+    print('<span style="font-weight: bold;">' + drugiTd.next.string.strip() + '</span>'),
+    print(drugiTd.next.nextSibling.string.strip() + '<br/>')
+
     
 
