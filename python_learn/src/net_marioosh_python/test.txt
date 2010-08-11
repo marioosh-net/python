@@ -5,4 +5,4 @@ Druga linia
 anon-access = none
 auth-access = write
 password-db = passwd
-    
+
