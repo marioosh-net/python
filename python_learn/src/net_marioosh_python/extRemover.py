@@ -26,5 +26,3 @@ if args.p == False:
 os.path.walk(args.path, visit, 1)
 if args.p == False:
     fo.close()
-
-

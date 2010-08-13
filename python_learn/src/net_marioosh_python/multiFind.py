@@ -56,5 +56,3 @@ for t in tab:
     i += 1
      
 os.path.walk(args.path, visit, 1)
-
-
