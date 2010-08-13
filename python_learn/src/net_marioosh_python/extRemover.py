@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import mimetypes, os, argparse, sys
+import os, argparse, sys
 
 def visit(arg, dirName, fileNames):
     for f in fileNames:

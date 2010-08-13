@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import mimetypes, os, argparse, sys, shutil
+import os, argparse, sys, shutil
     
 def visit(arg, dirName, fileNames):
     for f in fileNames:
@@ -14,11 +14,14 @@ def visit(arg, dirName, fileNames):
                     if not os.path.exists(args.dest):
                         os.makedirs(args.dest)
                         
-                    if os.path.exists(os.path.join(args.dest,f)):
+                    dest = os.path.join(args.dest,f)
+                    if os.path.exists(dest):
                         if args.n == False:
-                            shutil.copy2(fullPath, args.dest)
+                            if cmp(fullPath, dest) != 0:
+                                shutil.copy2(fullPath, args.dest)
                     else:
-                        shutil.copy2(fullPath, args.dest)
+                        if cmp(fullPath, dest) != 0:
+                            shutil.copy2(fullPath, args.dest)
                     
                     #log
                     if args.p == False:
