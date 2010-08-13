@@ -4,6 +4,7 @@ parser = argparse.ArgumentParser('extRemover',description='Remove files with som
 parser.add_argument('path',help='path from files will be removed and logged to file');
 parser.add_argument('ext',help='file extension to remove');
 parser.add_argument('logfile',nargs='?',default='extRemover.log',help='log file');
+parser.add_argument('-p',help='show files, DON\'T DELETE',action='store_true');
 args = parser.parse_args(sys.argv[1:]);
 
 def visit(arg, dirName, fileNames):
@@ -14,10 +15,14 @@ def visit(arg, dirName, fileNames):
             if ext in [args.ext]:
                 print(fullPath)
                 #fo.write(os.path.relpath(fullPath,args.path)+'\n')
-                fo.write(fullPath+'\n')
-                os.remove(fullPath)
+                if args.p == False:
+                    fo.write(fullPath+'\n')
+                    os.remove(fullPath)
                 
-fo = open(args.logfile,'w')
+if args.p == False:
+    fo = open(args.logfile,'w')
 os.path.walk(args.path, visit, 1)
-fo.close()
+if args.p == False:
+    fo.close()
+
 
