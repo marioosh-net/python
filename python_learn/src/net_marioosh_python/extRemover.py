@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import mimetypes, os, argparse, sys
 parser = argparse.ArgumentParser('extRemover',description='Remove files with some extension from path');
