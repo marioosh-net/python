@@ -16,7 +16,7 @@ def visit(arg, dirName, fileNames):
                         
                     dest = os.path.join(args.dest,f)
                     if os.path.exists(dest):
-                        if args.n == False:
+                        if args.o:
                             if cmp(fullPath, dest) != 0:
                                 shutil.copy2(fullPath, args.dest)
                     else:
@@ -36,7 +36,7 @@ parser.add_argument('listfile',help='file with list of files to search');
 parser.add_argument('dest',nargs='?',default='.',help='destination directory (where files will be copied), default .');
 parser.add_argument('logfile',nargs='?',default='multiFind.log',help='log file, default multiFind.log');
 parser.add_argument('-p',help='show files only, DON\'T COPY',action='store_true');
-parser.add_argument('-n',help='don\'t replace first searched',action='store_true');
+parser.add_argument('-o',help='overwrite first searched with next searches (in destination)',action='store_true');
 args = parser.parse_args(sys.argv[1:]);
 
 fo = open(args.listfile, 'r');
@@ -45,6 +45,14 @@ fo.close();
 i=0
 for t in tab:
     tab[i] = tab[i].replace('\n','');
+    s = tab[i].split('\\')  # win32
+    l = len(s);
+    s2 = s[l-1];
+    s3 = s2.split('/')  # unix
+    l2 = len(s3);
+    s4 = s3[l2-1];
+    print(s4)
+    tab[i] = s4
     i += 1
      
 os.path.walk(args.path, visit, 1)
