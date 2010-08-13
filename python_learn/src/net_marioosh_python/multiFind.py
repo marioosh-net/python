@@ -51,7 +51,7 @@ for t in tab:
     s3 = s2.split('/')  # unix
     l2 = len(s3);
     s4 = s3[l2-1];
-    print(s4)
+    # print(s4)
     tab[i] = s4
     i += 1
      
