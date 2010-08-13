@@ -6,8 +6,8 @@ def visit(arg, dirName, fileNames):
     for f in fileNames:
         fullPath = os.path.normpath(os.path.join(dirName,f))
         if not os.path.isdir(fullPath):
-            ext = os.path.splitext(fullPath)[1]
-            if ext in [args.ext]:
+            ext = str(os.path.splitext(fullPath)[1]).lower()
+            if ext in [args.ext.lower()]:
                 print(fullPath)
                 #fo.write(os.path.relpath(fullPath,args.path)+'\n')
                 if args.p == False:
