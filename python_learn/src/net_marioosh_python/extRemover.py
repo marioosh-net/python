@@ -14,7 +14,7 @@ def visit(arg, dirName, fileNames):
                     fo.write(fullPath+'\n')
                     os.remove(fullPath)
 
-parser = argparse.ArgumentParser('extRemover',description='Remove files with some extension from path');
+parser = argparse.ArgumentParser(os.path.basename(sys.argv[0]),description='Remove files with some extension from path');
 parser.add_argument('path',help='path from files will be removed');
 parser.add_argument('ext',help='file extension to remove');
 parser.add_argument('logfile',nargs='?',default='extRemover.log',help='log file');

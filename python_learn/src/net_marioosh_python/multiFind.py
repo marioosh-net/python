@@ -30,7 +30,7 @@ def visit(arg, dirName, fileNames):
                         fw.close()
                     
             
-parser = argparse.ArgumentParser('multiFind',description='Multi-search files in path');
+parser = argparse.ArgumentParser(os.path.basename(sys.argv[0]),description='Multi-search files in path');
 parser.add_argument('path',nargs='?',default='.',help='searched path, default .');
 parser.add_argument('listfile',help='list of files to search (as file)');
 parser.add_argument('dest',nargs='?',default='.',help='destination directory (where files will be copied), default .');
