@@ -30,9 +30,9 @@ def visit(arg, dirName, fileNames):
                         fw.close()
                     
             
-parser = argparse.ArgumentParser('multiFind',description='Multi-search files in Your system');
+parser = argparse.ArgumentParser('multiFind',description='Multi-search files in path');
 parser.add_argument('path',nargs='?',default='.',help='searched path, default .');
-parser.add_argument('listfile',help='file with list of files to search');
+parser.add_argument('listfile',help='list of files to search (as file)');
 parser.add_argument('dest',nargs='?',default='.',help='destination directory (where files will be copied), default .');
 parser.add_argument('logfile',nargs='?',default='multiFind.log',help='log file, default multiFind.log');
 parser.add_argument('-p',help='show files only, DON\'T COPY',action='store_true');
