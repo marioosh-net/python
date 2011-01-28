@@ -17,7 +17,7 @@ class App:
 
         frame = tkinter.Frame(master, height=100, width=300)
         frame.pack()
-        frame.pack_propagate(0)
+        #frame.pack_propagate(0)
 
         #self.button = tkinter.Button(frame, text="QUIT", fg="red", command=frame.quit)
         #self.button.pack(side=tkinter.LEFT)
@@ -30,9 +30,15 @@ class App:
         
         self.f1_name = tkinter.Entry(frame)
         self.f1_name.pack(side=tkinter.LEFT)    
-        
+
         self.open_file = tkinter.Button(frame, text="File", command=self.openf)
         self.open_file.pack(side=tkinter.LEFT)        
+        
+        self.l1 = tkinter.Label(frame, text='Password')
+        self.l1.pack(side=tkinter.LEFT)
+        
+        self.passw = tkinter.Entry(frame)
+        self.passw.pack(side=tkinter.LEFT)    
         
         self.run = tkinter.Button(frame, text="Run", command=self.run)
         self.run.pack(side=tkinter.LEFT)
@@ -41,11 +47,16 @@ class App:
         
     def openf(self):
         self.myfile = f.askopenfilename()
+        self.f1_name.insert(0, self.myfile)
             
     def run(self):
         if self.myfile != None:
-            self.f1_name.insert(0, self.myfile)
-            print(self.myfile)
+            if len(self.passw.get()) > 0:
+                self.messages.configure(text='')
+                self.f1_name.insert(0, self.myfile)
+                print(self.myfile)
+            else:
+                self.messages.configure(text='Error: Input password')
         else:
             self.messages.configure(text='Error: Select file')
 
