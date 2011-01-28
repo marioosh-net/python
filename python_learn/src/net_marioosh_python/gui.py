@@ -108,8 +108,8 @@ class App:
     
     # rozszerzenie na .zip
     def f2zip(self,f):
-        # POPRAWIC: to ma zwrocic sam plik, bez sciezki!!!!!
-        return os.path.splitext(f)[0] + ".zip"
+        x = os.path.basename(f)
+        return os.path.splitext(x)[0] + ".zip"
 
         
 root = tkinter.Tk()
