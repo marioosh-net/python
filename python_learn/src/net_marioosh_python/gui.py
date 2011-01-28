@@ -15,11 +15,15 @@ class App:
 
     def __init__(self, master):
 
-        frame = tkinter.Frame(master, height=200, width=500)
+        frame = tkinter.Frame(master, height=100, width=300)
         frame.pack()
+        frame.pack_propagate(0)
 
         #self.button = tkinter.Button(frame, text="QUIT", fg="red", command=frame.quit)
         #self.button.pack(side=tkinter.LEFT)
+
+        self.messages = tkinter.Label(frame, text='')
+        self.messages.pack(side=tkinter.TOP)        
 
         self.l1 = tkinter.Label(frame, text='File 1')
         self.l1.pack(side=tkinter.LEFT)
@@ -33,17 +37,18 @@ class App:
         self.run = tkinter.Button(frame, text="Run", command=self.run)
         self.run.pack(side=tkinter.LEFT)
         
-    def say_hi(self):
-        print('hi there, everyone!')
+        self.myfile = None
         
     def openf(self):
-        myfile = f.askopenfilename()
-        if myfile != None:
-            self.f1_name.insert(0, myfile)
-            print(myfile)
+        self.myfile = f.askopenfilename()
             
     def run(self):
-        print('pack')
+        if self.myfile != None:
+            self.f1_name.insert(0, self.myfile)
+            print(self.myfile)
+        else:
+            self.messages.configure(text='Error: Select file')
+
         
 root = tkinter.Tk()
 app = App(root)
