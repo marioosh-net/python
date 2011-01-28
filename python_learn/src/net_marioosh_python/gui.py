@@ -10,6 +10,9 @@ Created on 2010-07-28
 import tkinter
 import tkinter.filedialog as f
 import tkinter.messagebox as m
+import os, sys, shutil
+import subprocess
+
 
 class App:
 
@@ -55,10 +58,58 @@ class App:
                 self.messages.configure(text='')
                 self.f1_name.insert(0, self.myfile)
                 print(self.myfile)
+                
+                self.process();                
+                
             else:
                 self.messages.configure(text='Error: Input password')
         else:
             self.messages.configure(text='Error: Select file')
+
+    def process(self):
+        zipfile = self.f2zip(self.myfile)
+        # zaczytaj sciezke do drugiego pliku z configa
+        f3 = open('zipper.conf')
+        file2 = f3.readline()
+        file2 = file2.strip()
+        
+        # katalog glowny na zipy
+        dir = self.myfile+'_dir'
+        self.make_or_del(dir)
+    
+        zip1dir = os.path.normpath(os.path.join(dir,'zip1'))
+        zip2dir = os.path.normpath(os.path.join(dir,'zip2'))
+        zip3dir = os.path.normpath(os.path.join(dir,'zip3'))
+        os.mkdir(zip1dir)
+        os.mkdir(zip2dir)
+        os.mkdir(zip3dir)
+        
+        # password = getpass.getpass('Password: ')
+        password = self.passw.get()
+    
+        # pakuj 7-zipem
+        pz1 = os.path.normpath(os.path.join(zip1dir,zipfile))
+        subprocess.call(['7z', 'a', '-y', pz1] + [self.myfile])
+        pz2 = os.path.normpath(os.path.join(zip2dir,zipfile))
+        subprocess.call(['7z', 'a', '-p'+password, '-y', pz2] + [self.myfile])
+        pz3 = os.path.normpath(os.path.join(zip3dir,zipfile))
+        subprocess.call(['7z', 'a', '-p'+password, '-y', pz3] + [self.myfile,file2])
+        
+        print(pz1)
+        print(pz2)
+        print(pz3)
+        
+        
+    # jak jest katalog to go usun
+    def make_or_del(self,path):
+        if os.path.exists(path):
+            shutil.rmtree(path)
+        os.mkdir(path)
+    
+    # rozszerzenie na .zip
+    def f2zip(self,f):
+        # POPRAWIC: to ma zwrocic sam plik, bez sciezki!!!!!
+        return os.path.splitext(f)[0] + ".zip"
 
         
 root = tkinter.Tk()
