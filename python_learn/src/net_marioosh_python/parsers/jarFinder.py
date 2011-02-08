@@ -24,6 +24,11 @@ print(str(titleTag.string))
 
 # znajdz pierwszy pasujacy
 lista = soup.find('table', attrs={'class': 'results'})
-spanFirst = lista.find('span', attrs={'class': 'type'});
-print(spanFirst.spanFirst.findNextSibling('a'))
-# print(" - " + spanFirst.findNextSibling('a').string)
+trs = lista.findAll('tr');
+a = lista.find('tr').find('a');
+print(a['href']);
+
+# all tr
+# for tr in trs:
+#     a = tr.find('a');
+#     print(a['href']);
