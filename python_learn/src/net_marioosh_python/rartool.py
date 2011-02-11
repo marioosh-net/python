@@ -173,5 +173,7 @@ class App:
 
         
 root = tkinter.Tk()
+root.title("rartool")
+root.resizable(width=False, height=False)
 app = App(root)
 root.mainloop()
