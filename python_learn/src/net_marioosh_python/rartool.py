@@ -149,11 +149,11 @@ class App:
  
         # pakuj rarem
         pz1 = os.path.normpath(os.path.join(zip1dir,zipfile))
-        subprocess.call(['rar', 'a', '-r', pz1] + [self.myfile])
+        subprocess.call(['rar', 'a', '-r', '-ep', pz1] + [self.myfile])
         pz2 = os.path.normpath(os.path.join(zip2dir,zipfile))
-        subprocess.call(['rar', 'a', '-r', '-p'+password, pz2] + [self.myfile])
+        subprocess.call(['rar', 'a', '-r', '-ep', '-p'+password, pz2] + [self.myfile])
         pz3 = os.path.normpath(os.path.join(zip3dir,zipfile))
-        subprocess.call(['rar', 'a', '-r', '-p'+password, pz3] + [self.myfile,file2])
+        subprocess.call(['rar', 'a', '-r', '-ep', '-p'+password, pz3] + [self.myfile,file2])
         
     # jak jest katalog to go usun
     def make_or_del(self,path):
