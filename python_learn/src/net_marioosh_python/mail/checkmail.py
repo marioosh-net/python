@@ -15,16 +15,26 @@ for msg in list[1]:
     top = p.top(msg_num, 0);
     header = top[1];
 
-    # za pomoca parsera    
+    # parsuje header   
     m = parser.HeaderParser().parsestr("\n".join(header));
     print m['from'];
     
-    if m['from'].find('mario@marioosh.net') != -1:
+    if m['from'].find('mario@marioosh.net') != -1 or True:
         r = p.retr(msg_num)[1];
-        content = parser.HeaderParser().parsestr("\n".join(r));
-        print content;
-        break;
-    
+        content = parser.Parser().parsestr("\n".join(r));
+        # print content;
+
+        body = [];
+        if content.is_multipart():
+            for part in content.get_payload():
+                body.append(part.get_payload())
+        else:
+            body.append(content.get_payload())
+            
+        for b in body:
+            print "--------- BODY ---------- "
+            print b
+        
     # tylko pierwszy mail        
     break;
 
