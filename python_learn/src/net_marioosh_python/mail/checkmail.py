@@ -20,21 +20,11 @@ for msg in list[1]:
     print m['from'];
     
     if m['from'].find('mario@marioosh.net') != -1:
-        print m;
+        r = p.retr(msg_num)[1];
+        content = parser.HeaderParser().parsestr("\n".join(r));
+        print content;
+        break;
     
-    # recznie
-    if False:
-        for c in header:
-            if c[0:8] == 'Subject:':
-                m_subject = c[9:];
-            if c[0:5] == 'From:':
-                m_from = c[6:] 
-        print m_from
-        if m_from == 'mario@marioosh.net':
-            print c;
-            m = p.retr(msg_num);
-            content = m[1];        
-
     # tylko pierwszy mail        
     break;
 
