@@ -16,8 +16,11 @@ for msg in list[1]:
     header = top[1];
 
     # za pomoca parsera    
-    message = parser.HeaderParser().parsestr("\n".join(header));
-    print message['from'];
+    m = parser.HeaderParser().parsestr("\n".join(header));
+    print m['from'];
+    
+    if m['from'].find('mario@marioosh.net'):
+        print m;
     
     # recznie
     if False:
