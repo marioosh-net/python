@@ -56,6 +56,7 @@ class Checker:
                 # conn = MySQLdb.connect("host", "user", "haslo", "baza");
                 # c = conn.cursor();
                 # c.execute("INSERT INTO users VALUES('', 'albin', 'yyy')")
+                # # conn.commit()
                 
             # tylko pierwszy mail        
             break;
