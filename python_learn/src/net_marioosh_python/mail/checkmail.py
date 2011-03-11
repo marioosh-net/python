@@ -50,7 +50,7 @@ class Checker:
         self.p.quit()
 
 checker = Checker('pop3.o2.pl', 'sp4my', 'zbc123');
-checker.count_message()
+print checker.count_message()
 checker.check()
 checker.disconnect()
 
