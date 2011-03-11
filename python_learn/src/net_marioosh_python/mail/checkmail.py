@@ -11,8 +11,8 @@ class Checker:
         self.host = host;
         try:
             self.p = poplib.POP3_SSL(host);
-            self.p.user('sp4mys')
-            self.p.pass_('zbc123')
+            self.p.user(user)
+            self.p.pass_(password)
             print self.p.getwelcome();
         except Exception as (errno):
             print errno
