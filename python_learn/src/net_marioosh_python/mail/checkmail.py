@@ -3,8 +3,8 @@ import sys
 from email import parser
 
 p = poplib.POP3_SSL('pop.gmail.com')
-p.user('mariusz@dandelion.com.pl')
-p.pass_('Chiewao4')
+p.user('spam@marioosh.net')
+p.pass_('zbc123')
 
 print p.getwelcome();
 print "MESSAGES: " + str(p.stat()[0]);
