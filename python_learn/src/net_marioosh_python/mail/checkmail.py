@@ -2,49 +2,56 @@ import poplib
 import sys
 from email import parser
 
-p = poplib.POP3_SSL('pop3.o2.pl')
-p.user('sp4my')
-p.pass_('zbc123')
-
-print p.getwelcome();
-print "MESSAGES: " + str(p.stat()[0]);
-
-list = p.list();
-for msg in list[1]:
-    msg_num = msg.split(' ')[0];
-    top = p.top(msg_num, 0);
-    h = top[1];
-
-    # parsuje header   
-    header = parser.HeaderParser().parsestr("\n".join(h));
-    print header['from'];
-    
-    if header['from'].find('mario@marioosh.net') != -1 or True:
-        r = p.retr(msg_num)[1];
-        content = parser.Parser().parsestr("\n".join(r));
-        # print content;
-
-        body = [];
-        if content.is_multipart():
-            for part in content.get_payload():
-                body.append(part.get_payload())
-        else:
-            body.append(content.get_payload())
-            
-        for b in body:
-            print "--------- BODY ---------- "
-            print b
+class Checker:
+    def __init__(self, host, user, password):
+        print 'Checker'
+        self.password = password;
+        self.user = user;
+        self.host = host;
+        self.p = poplib.POP3_SSL(host);
+        self.p.user('sp4my')
+        self.p.pass_('zbc123')
+        print self.p.getwelcome();
+         
+    def count_message(self):
+        return self.p.stat()[0]
         
-    # tylko pierwszy mail        
-    break;
+    def check(self):
+        list = self.p.list();
+        for msg in list[1]:
+            msg_num = msg.split(' ')[0];
+            top = self.p.top(msg_num, 0);
+            h = top[1];
+        
+            # parsuje header   
+            header = parser.HeaderParser().parsestr("\n".join(h));
+            print header['from'];
+            
+            if header['from'].find('mario@marioosh.net') != -1 or True:
+                r = self.p.retr(msg_num)[1];
+                content = parser.Parser().parsestr("\n".join(r));
+                # print content;
+        
+                body = [];
+                if content.is_multipart():
+                    for part in content.get_payload():
+                        body.append(part.get_payload())
+                else:
+                    body.append(content.get_payload())
+                    
+                for b in body:
+                    print "--------- BODY ---------- "
+                    print b
+                
+            # tylko pierwszy mail        
+            break;
 
-#Get messages from server:
-# messages = [p.retr(i) for i in range(1, len(p.list()[1]) + 1)]
-# Concat message pieces:
-# messages = ["\n".join(mssg[1]) for mssg in messages]
-#Parse message intom an email object:
-# messages = [parser.Parser().parsestr(mssg) for mssg in messages]
-# for message in messages:
-#     print message['subject']
+    def disconnect(self):
+        self.p.quit()
 
-p.quit()
+checker = Checker('pop3.o2.pl', 'sp4my', 'zbc123');
+checker.count_message()
+checker.check()
+checker.disconnect()
+
+
