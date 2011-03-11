@@ -19,7 +19,7 @@ for msg in list[1]:
     m = parser.HeaderParser().parsestr("\n".join(header));
     print m['from'];
     
-    if m['from'].find('mario@marioosh.net'):
+    if m['from'].find('mario@marioosh.net') != -1:
         print m;
     
     # recznie
