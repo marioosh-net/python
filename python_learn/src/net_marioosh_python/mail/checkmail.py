@@ -2,6 +2,7 @@ import poplib
 import sys
 from email import parser
 from symbol import except_clause
+# import MySQLdb
 
 class Checker:
     def __init__(self, host, user, password):
@@ -50,6 +51,11 @@ class Checker:
                 for b in body:
                     print "--------- BODY ---------- "
                     print b
+              
+                # dostep do mysql
+                # conn = MySQLdb.connect("host", "user", "haslo", "baza");
+                # c = conn.cursor();
+                # c.execute("INSERT INTO users VALUES('', 'albin', 'yyy')")
                 
             # tylko pierwszy mail        
             break;
