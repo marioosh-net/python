@@ -1,20 +1,28 @@
 import poplib
 import sys
 from email import parser
+from symbol import except_clause
 
 class Checker:
     def __init__(self, host, user, password):
-        print 'Checker'
+        # print 'Checker'
         self.password = password;
         self.user = user;
         self.host = host;
-        self.p = poplib.POP3_SSL(host);
-        self.p.user('sp4my')
-        self.p.pass_('zbc123')
-        print self.p.getwelcome();
+        try:
+            self.p = poplib.POP3_SSL(host);
+            self.p.user('sp4mys')
+            self.p.pass_('zbc123')
+            print self.p.getwelcome();
+        except Exception as (errno):
+            print errno
+            sys.exit(-1)
          
     def count_message(self):
-        return self.p.stat()[0]
+        try:
+            return self.p.stat()[0]
+        except:
+            return "XXXX"
         
     def check(self):
         list = self.p.list();
@@ -51,7 +59,7 @@ class Checker:
 
 checker = Checker('pop3.o2.pl', 'sp4my', 'zbc123');
 print checker.count_message()
-checker.check()
+# checker.check()
 checker.disconnect()
 
 
