@@ -2,8 +2,8 @@ import poplib
 import sys
 from email import parser
 
-p = poplib.POP3_SSL('pop.gmail.com')
-p.user('spam@marioosh.net')
+p = poplib.POP3_SSL('pop3.o2.pl')
+p.user('sp4my')
 p.pass_('zbc123')
 
 print p.getwelcome();
