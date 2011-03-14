@@ -25,6 +25,8 @@ class Checker:
             sys.exit(-1)
          
     def set_checked_emails(self, emails):
+        'ustawia liste adresow zrodlowych na ktore bedzie wrazliwy checker'
+        'sprawdzal bedzie tylko te wiadomosci, ktore przyjda z maili wystepujacych w liscie'
         self.checked_emails = emails;
 
     def count_message(self):
