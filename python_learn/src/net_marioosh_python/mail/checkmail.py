@@ -141,7 +141,8 @@ NOW(), NOW())";
             c.execute("select id from mantis_user_table where email = '"+email+"'")
             return c.fetchone()[0]
         except:
-            return self.get_user_id('mariusz@dandelion.com.pl');
+            return 0;
+            # return self.get_user_id('mariusz@dandelion.com.pl');
 
 maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
 
@@ -150,5 +151,4 @@ checker1.set_checked_emails(['mario@marioosh.net','mario2@marioosh.net']);
 print checker1.count_message()
 checker1.check()
 checker1.disconnect()
-
 
