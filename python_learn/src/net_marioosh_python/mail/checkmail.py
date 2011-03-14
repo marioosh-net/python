@@ -68,6 +68,10 @@ class Checker:
 class BugMaker:
     def __init__(self, host, user, password, db):
         self.conn = MySQLdb.connect(host, user, password, db);
+        self.log = False
+
+    def set_log(self, log):
+        self.log = log;
 
     def list_texts(self):
         c = self.conn.cursor();
@@ -85,12 +89,12 @@ class BugMaker:
 
     def add_bug(self, email_from, subject, text, email_to):
 
-        print "FROM:"+email_from
-        print "SUBJ:"+subject
-        print "TO  :"+email_to
-        print "BODY:"
-        print text
-        # return;
+        if self.log:
+            print "FROM:"+email_from
+            print "SUBJ:"+subject
+            print "TO  :"+email_to
+            print "BODY:"
+            print text
 
         # tabelka mantis_bug_text_table (opisy bugow)
         c = self.conn.cursor();
@@ -140,9 +144,11 @@ NOW(), NOW())";
             return self.get_user_id('mariusz@dandelion.com.pl');
 
 maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
-checker = Checker('pop3.o2.pl', 'sp4my', 'zbc123', maker);
-checker.set_checked_emails(['mario@marioosh.net','mario2@marioosh.net']);
-print checker.count_message()
-checker.check()
-checker.disconnect()
+
+checker1 = Checker('pop3.o2.pl', 'sp4my', 'zbc123', maker);
+checker1.set_checked_emails(['mario@marioosh.net','mario2@marioosh.net']);
+print checker1.count_message()
+checker1.check()
+checker1.disconnect()
+
 
