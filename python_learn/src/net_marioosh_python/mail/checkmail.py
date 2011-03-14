@@ -142,7 +142,6 @@ NOW(), NOW())";
             return c.fetchone()[0]
         except:
             return 0;
-            # return self.get_user_id('mariusz@dandelion.com.pl');
 
 maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
 
