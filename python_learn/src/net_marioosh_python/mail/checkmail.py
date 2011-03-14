@@ -40,7 +40,6 @@ class Checker:
         
             # parsuje header   
             header = parser.HeaderParser().parsestr("\n".join(h));
-            print header['from'];
            
             for e in self.checked_emails:
                 if header['from'].find(e) != -1:
