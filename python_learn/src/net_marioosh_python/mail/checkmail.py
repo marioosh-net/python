@@ -169,8 +169,19 @@ class BugMaker:
         try:
             c = self.conn.cursor();
             c.execute("select id from mantis_user_table where email = '"+email+"'")
-            return c.fetchone()[0]
-        except:
+            one = c.fetchone()
+            if one != None:
+                return one[0]
+            else:
+                c.execute("select id,email from mantis_user_table");
+                rows = c.fetchall()
+                for r in rows:
+                    if email.find(r[1]) != -1:
+                        return r[0];
+                return 0;
+
+        except Exception as (errno):
+            print str(errno);
             return 0;
 
 maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
