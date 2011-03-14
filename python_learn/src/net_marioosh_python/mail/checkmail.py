@@ -117,14 +117,12 @@ additional_information) VALUES \
 reporter_id, \
 handler_id, \
 bug_text_id, \
-summary, \
-category) values \
+summary) values \
 ("+str(self.get_proj_id_by_user(email_to))+", \
 "+str(self.get_user_id(email_from))+", \
 "+str(self.get_user_id(email_to))+", \
 "+str(textid)+", \
-'"+subject+"', \
-'')";
+'"+subject+"')";
         print sql;
         # c.execute(sql);
         self.conn.commit()
