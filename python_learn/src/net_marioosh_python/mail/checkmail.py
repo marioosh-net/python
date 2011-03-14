@@ -34,7 +34,7 @@ class Checker:
             return self.p.stat()[0]
         except:
             return "XXXX"
-        
+       
     def check(self):
         list = self.p.list();
         for msg in list[1]:
@@ -44,25 +44,46 @@ class Checker:
         
             # parsuje header   
             header = parser.HeaderParser().parsestr("\n".join(h));
+            print header;
            
-            for e in self.checked_emails:
-                if header['from'].find(e) != -1:
-                   
-                    # get content i body
-                    r = self.p.retr(msg_num)[1];
-                    content = parser.Parser().parsestr("\n".join(r));
-                    body = [];
-                    if content.is_multipart():
-                        for part in content.get_payload():
-                            body.append(part.get_payload())
-                    else:
-                        body.append(content.get_payload())
+            if len(self.checked_emails) > 0:
+                # tylko maile z listy
+                for e in self.checked_emails:
+                    if header['from'].find(e) != -1:
+                       
+                        # get content i body
+                        r = self.p.retr(msg_num)[1];
+                        content = parser.Parser().parsestr("\n".join(r));
+                        body = [];
+                        if content.is_multipart():
+                            for part in content.get_payload():
+                                body.append(part.get_payload())
+                        else:
+                            body.append(content.get_payload())
 
-                    # dodaj buga
-                    maker.add_bug(header['from'], header['subject'], body[0], header['to']);
-                
+                        # dodaj buga
+                        maker.add_bug(header['from'], header['subject'], body[0], header['to']);
+                        # usun wiadomosc
+                        self.p.dele(msg_num);
+            else:
+                # przetwarzaj WSZYSTKIE maile
+                # get content i body
+                r = self.p.retr(msg_num)[1];
+                content = parser.Parser().parsestr("\n".join(r));
+                body = [];
+                if content.is_multipart():
+                    for part in content.get_payload():
+                        body.append(part.get_payload())
+                else:
+                    body.append(content.get_payload())
+
+                # dodaj buga
+                maker.add_bug(header['from'], header['subject'], body[0], header['to']);
+                # usun wiadomosc
+                self.p.dele(msg_num);
+               
             # tylko pierwszy mail        
-            break;
+            # break;
 
     def disconnect(self):
         self.p.quit()
@@ -133,9 +154,9 @@ class BugMaker:
 
     def get_proj_id_by_user(self, email):
         'zwraca id projektu, za ktory jest odpowiedzialny user o podanym emailu'
-        if email == 'mariusz@dandelion.com.pl':
-            return 11; # LoogAPPS
-        return 11;  
+        # if email == 'mariusz@dandelion.com.pl':
+        #    return 11; # LoogAPPS
+        return 1;  # LBS
 
     def get_proj_id_by_name(self, name):
         'zwraca id projektu po nazwie'
@@ -155,8 +176,8 @@ class BugMaker:
 maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
 # maker.set_log(True);
 
-checker1 = Checker('pop3.o2.pl', 'sp4my', 'zbc123', maker);
-checker1.set_checked_emails(['mario@marioosh.net','mario2@marioosh.net']);
+checker1 = Checker('loogberry.com', 'maildrop@loogberry.com', 'chosen12!', maker);
+# checker1.set_checked_emails(['mario@marioosh.net','mario2@marioosh.net']);
 print checker1.count_message()
 checker1.check()
 checker1.disconnect()
