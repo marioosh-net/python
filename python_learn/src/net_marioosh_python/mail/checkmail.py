@@ -4,9 +4,11 @@ from email import parser
 from symbol import except_clause
 import MySQLdb
 
+# klasa mail checkera
 class Checker:
     def __init__(self, host, user, password, maker):
         # print 'Checker'
+        self.checked_emails = [];
         self.password = password;
         self.user = user;
         self.host = host;
@@ -20,6 +22,9 @@ class Checker:
             print errno
             sys.exit(-1)
          
+    def set_checked_emails(self, emails):
+        self.checked_emails = emails;
+
     def count_message(self):
         try:
             return self.p.stat()[0]
@@ -36,28 +41,22 @@ class Checker:
             # parsuje header   
             header = parser.HeaderParser().parsestr("\n".join(h));
             print header['from'];
-            
-            if header['from'].find('mario@marioosh.net') != -1 or True:
-                r = self.p.retr(msg_num)[1];
-                content = parser.Parser().parsestr("\n".join(r));
-                # print content;
-        
-                body = [];
-                if content.is_multipart():
-                    for part in content.get_payload():
-                        body.append(part.get_payload())
-                else:
-                    body.append(content.get_payload())
-                    
-                for b in body:
-                    print "--------- BODY ---------- "
-                    print b
-              
-                # dostep do mysql
-                # conn = MySQLdb.connect("host", "user", "haslo", "baza");
-                # c = conn.cursor();
-                # c.execute("INSERT INTO users VALUES('', 'albin', 'yyy')")
-                # # conn.commit()
+           
+            for e in self.checked_emails:
+                if header['from'].find(e) != -1:
+                   
+                    # get content i body
+                    r = self.p.retr(msg_num)[1];
+                    content = parser.Parser().parsestr("\n".join(r));
+                    body = [];
+                    if content.is_multipart():
+                        for part in content.get_payload():
+                            body.append(part.get_payload())
+                    else:
+                        body.append(content.get_payload())
+
+                    # dodaj buga
+                    maker.add_bug(header['from'], header['subject'], body[0], header['to']);
                 
             # tylko pierwszy mail        
             break;
@@ -66,6 +65,7 @@ class Checker:
         self.p.quit()
 
 
+# klasa dostepu do bazy mantisa
 class BugMaker:
     def __init__(self, host, user, password, db):
         self.conn = MySQLdb.connect(host, user, password, db);
@@ -85,6 +85,13 @@ class BugMaker:
             print r
 
     def add_bug(self, email_from, subject, text, email_to):
+
+        print "FROM:"+email_from
+        print "SUBJ:"+subject
+        print "TO  :"+email_to
+        print "BODY:"
+        print text
+        return;
 
         # tabelka texty
         # mantis_bug_text_table.description = text
@@ -116,10 +123,9 @@ class BugMaker:
 
 
 maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
-
 checker = Checker('pop3.o2.pl', 'sp4my', 'zbc123', maker);
+checker.set_checked_emails(['mario@marioosh.net','mario2@marioosh.net']);
 print checker.count_message()
-# checker.check()
+checker.check()
 checker.disconnect()
-
 
