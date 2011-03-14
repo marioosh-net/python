@@ -5,11 +5,12 @@ from symbol import except_clause
 import MySQLdb
 
 class Checker:
-    def __init__(self, host, user, password):
+    def __init__(self, host, user, password, maker):
         # print 'Checker'
         self.password = password;
         self.user = user;
         self.host = host;
+        self.maker = maker;
         try:
             self.p = poplib.POP3_SSL(host);
             self.p.user(user)
@@ -114,12 +115,11 @@ class BugMaker:
         return row_id
 
 
-checker = Checker('pop3.o2.pl', 'sp4my', 'zbc123');
+maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
+
+checker = Checker('pop3.o2.pl', 'sp4my', 'zbc123', maker);
 print checker.count_message()
 # checker.check()
 checker.disconnect()
 
-# dostep do mysql
-maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
-maker.list_bugs()
 
