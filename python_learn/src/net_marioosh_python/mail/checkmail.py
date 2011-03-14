@@ -132,14 +132,19 @@ class BugMaker:
         self.conn.commit()
 
     def get_proj_id_by_user(self, email):
-        return 11;  # LoogAPPS
+        'zwraca id projektu, za ktory jest odpowiedzialny user o podanym emailu'
+        if email == 'mariusz@dandelion.com.pl':
+            return 11; # LoogAPPS
+        return 11;  
 
     def get_proj_id_by_name(self, name):
+        'zwraca id projektu po nazwie'
         c = self.conn.cursor();
         c.execute("select id from mantis_project_table where name = '"+name+"'")
         return c.fetchone()[0]
 
     def get_user_id(self, email):
+        'zwraca id usera po emailu, jesli nie znajdzie zwraca 0'
         try:
             c = self.conn.cursor();
             c.execute("select id from mantis_user_table where email = '"+email+"'")
@@ -148,6 +153,7 @@ class BugMaker:
             return 0;
 
 maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
+# maker.set_log(True);
 
 checker1 = Checker('pop3.o2.pl', 'sp4my', 'zbc123', maker);
 checker1.set_checked_emails(['mario@marioosh.net','mario2@marioosh.net']);
