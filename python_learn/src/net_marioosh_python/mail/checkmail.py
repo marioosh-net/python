@@ -98,13 +98,31 @@ class BugMaker:
 
         # tabelka mantis_bug_text_table (opisy bugow)
         c = self.conn.cursor();
-        sql = "INSERT INTO mantis_bug_text_table (description, steps_to_reproduce, additional_information) VALUES ('"+text+"', '', '[maildrop]')";
+        sql = "INSERT INTO mantis_bug_text_table \
+(description, \
+steps_to_reproduce, \
+additional_information) VALUES \
+('"+text+"', \
+'', \
+'[maildrop]')";
         print sql;
         c.execute(sql)
         textid = self.conn.insert_id()
 
         # tabelka mantis_bug_table (bugi)
-        sql = "insert into mantis_bug_table (project_id, reporter_id, handler_id, bug_text_id, summary, date_submitted, last_updated) values ("+str(self.get_proj_id_by_user(email_to))+", "+str(self.get_user_id(email_from))+", "+str(self.get_user_id(email_to))+", "+str(textid)+", '[maildrop] "+subject+"', NOW(), NOW())";
+        sql = "insert into mantis_bug_table \
+(project_id, \
+reporter_id, \
+handler_id, \
+bug_text_id, \
+summary, \
+date_submitted, last_updated) values \
+("+str(self.get_proj_id_by_user(email_to))+", \
+"+str(self.get_user_id(email_from))+", \
+"+str(self.get_user_id(email_to))+", \
+"+str(textid)+", \
+'[maildrop] "+subject+"', \
+NOW(), NOW())";
         print sql;
         c.execute(sql);
         self.conn.commit()
