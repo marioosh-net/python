@@ -90,14 +90,21 @@ class BugMaker:
         print "TO  :"+email_to
         print "BODY:"
         print text
-        return;
+        # return;
 
         # tabelka texty
         # mantis_bug_text_table.description = text
         c = self.conn.cursor();
-        c.execute("INSERT INTO mantis_bug_text_table (description) VALUES('"+text+"')")
-        self.conn.commit()
-
+        sql = "INSERT INTO mantis_bug_text_table \
+(description, \
+steps_to_reproduce, \
+additional_information) VALUES \
+('"+text+"', \
+'', \
+'')";
+        print sql;
+        # c.execute(sql)
+        textid = self.conn.insert_id()
 
         # tabelka bugi
         # muntis_bug_table.summary = subject
@@ -105,6 +112,22 @@ class BugMaker:
         # mantis_bug_table.handler_id = self.get_user_id(email_to)
         # mantis_bug_table.reporter_id = self.get_user_id(email_from)
         # mantis_bug_table.bug_text_id = mantis_bug_text_table.id
+        sql = "insert into mantis_bug_table \
+(project_id, \
+reporter_id, \
+handler_id, \
+bug_text_id, \
+summary, \
+category) values \
+("+str(self.get_proj_id_by_user(email_to))+", \
+"+str(self.get_user_id(email_from))+", \
+"+str(self.get_user_id(email_to))+", \
+"+str(textid)+", \
+'"+subject+"', \
+'')";
+        print sql;
+        # c.execute(sql);
+        self.conn.commit()
 
     def get_proj_id_by_user(self, email):
         return 11;  # LoogAPPS
@@ -115,11 +138,12 @@ class BugMaker:
         return c.fetchone()[0]
 
     def get_user_id(self, email):
-        c = self.conn.cursor();
-        c.execute("select id from mantis_user_table where email = '"+email+"'")
-        row_id = c.fetchone()[0]
-        return row_id
-
+        try:
+            c = self.conn.cursor();
+            c.execute("select id from mantis_user_table where email = '"+email+"'")
+            return c.fetchone()[0]
+        except:
+            return self.get_user_id('mariusz@dandelion.com.pl');
 
 maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
 checker = Checker('pop3.o2.pl', 'sp4my', 'zbc123', maker);
