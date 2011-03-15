@@ -54,7 +54,7 @@ class Checker:
                 a.append(part.get_content_type())
                 att.append(a)
             if part.get_content_maintype() == 'text':
-                body.append(part.get_payload())
+                body.append(part.get_payload(decode=True))
 
         # dodaj buga
         maker.add_bug(content['from'], content['subject'], body[0], content['to'], att);
@@ -70,7 +70,9 @@ class Checker:
         
             # parsuje header   
             header = parser.HeaderParser().parsestr("\n".join(h));
-            # print header;
+            print "---HEADER---"
+            print header;
+            print "---HEADER END---"
            
             if len(self.checked_emails) > 0:
                 # tylko maile z listy
