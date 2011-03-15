@@ -192,7 +192,7 @@ class BugMaker:
         'zwraca id projektu, za ktory jest odpowiedzialny user o podanym emailu'
         # if email == 'mariusz@dandelion.com.pl':
         #    return 11; # LoogAPPS
-        return 1;  # LBS
+        return 13;  # Pls assign ..
 
     def get_proj_id_by_name(self, name):
         'zwraca id projektu po nazwie'
