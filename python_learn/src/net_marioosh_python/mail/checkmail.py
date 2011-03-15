@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import poplib
@@ -5,6 +6,8 @@ import sys
 from email import parser
 from symbol import except_clause
 import MySQLdb
+import hashlib
+from datetime import datetime
 
 # klasa mail checkera
 class Checker:
@@ -34,7 +37,30 @@ class Checker:
             return self.p.stat()[0]
         except:
             return "XXXX"
-       
+      
+    def prepare_bug(self, msg_num):
+        r = self.p.retr(msg_num)[1];
+        content = parser.Parser().parsestr("\n".join(r));
+        body = [];
+        att = [];
+        for part in content.walk():
+            if part.get_content_maintype() == 'multipart':
+                continue
+            filename = part.get_filename()
+            if filename:
+                a = []
+                a.append(filename)
+                a.append(part.get_payload(decode=True))
+                a.append(part.get_content_type())
+                att.append(a)
+            if part.get_content_maintype() == 'text':
+                body.append(part.get_payload())
+
+        # dodaj buga
+        maker.add_bug(content['from'], content['subject'], body[0], content['to'], att);
+        # usun wiadomosc
+        self.p.dele(msg_num);
+
     def check(self):
         list = self.p.list();
         for msg in list[1]:
@@ -44,43 +70,18 @@ class Checker:
         
             # parsuje header   
             header = parser.HeaderParser().parsestr("\n".join(h));
-            print header;
+            # print header;
            
             if len(self.checked_emails) > 0:
                 # tylko maile z listy
                 for e in self.checked_emails:
                     if header['from'].find(e) != -1:
-                       
-                        # get content i body
-                        r = self.p.retr(msg_num)[1];
-                        content = parser.Parser().parsestr("\n".join(r));
-                        body = [];
-                        if content.is_multipart():
-                            for part in content.get_payload():
-                                body.append(part.get_payload())
-                        else:
-                            body.append(content.get_payload())
+                        self.prepare_bug(msg_num);
 
-                        # dodaj buga
-                        maker.add_bug(header['from'], header['subject'], body[0], header['to']);
-                        # usun wiadomosc
-                        self.p.dele(msg_num);
             else:
                 # przetwarzaj WSZYSTKIE maile
                 # get content i body
-                r = self.p.retr(msg_num)[1];
-                content = parser.Parser().parsestr("\n".join(r));
-                body = [];
-                if content.is_multipart():
-                    for part in content.get_payload():
-                        body.append(part.get_payload())
-                else:
-                    body.append(content.get_payload())
-
-                # dodaj buga
-                maker.add_bug(header['from'], header['subject'], body[0], header['to']);
-                # usun wiadomosc
-                self.p.dele(msg_num);
+                self.prepare_bug(msg_num);
                
             # tylko pierwszy mail        
             # break;
@@ -112,12 +113,16 @@ class BugMaker:
         for r in rows:
             print r
 
-    def add_bug(self, email_from, subject, text, email_to):
+    def add_bug(self, email_from, subject, text, email_to, att):
 
         if self.log:
             print "FROM:"+email_from
             print "SUBJ:"+subject
             print "TO  :"+email_to
+            print "ATT :"
+            if len(att) > 0:
+                for a in att:
+                    print a[0]
             print "BODY:"
             print text
 
@@ -150,6 +155,35 @@ class BugMaker:
             NOW(), NOW())";
         print sql;
         c.execute(sql);
+        bugid = self.conn.insert_id()
+
+        # tabelka mantis_bug_file_table (zalaczniki)
+        if len(att) > 0:
+            # print "attachments: "+str(len(att))
+            for a in att:
+                m = hashlib.md5()
+                m.update(str(a[0])+str(datetime.today()))
+                filesize = len(a[1]);
+                blob = a[1];
+
+                sql = "insert into mantis_bug_file_table \
+                    (bug_id, \
+                    diskfile, \
+                    filename, \
+                    filesize, \
+                    file_type, \
+                    date_added, \
+                    content) values \
+                    ("+str(bugid)+", \
+                    '"+m.hexdigest()+"', \
+                    '"+a[0]+"', \
+                    "+str(filesize)+", \
+                    '"+a[2]+"', \
+                    NOW(), \
+                    %s)"
+                print sql
+                c.execute(sql, blob);
+
         self.conn.commit()
 
     def get_proj_id_by_user(self, email):
@@ -185,9 +219,11 @@ class BugMaker:
             return 0;
 
 maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
-# maker.set_log(True);
+maker.set_log(True);
 
 checker1 = Checker('loogberry.com', 'maildrop@loogberry.com', 'chosen12!', maker);
+# checker1 = Checker('pop3.o2.pl', 'sp4my', 'zbc123', maker);
+
 # checker1.set_checked_emails(['mario@marioosh.net','mario2@marioosh.net']);
 print checker1.count_message()
 checker1.check()
