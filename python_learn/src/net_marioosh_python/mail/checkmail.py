@@ -221,6 +221,7 @@ class BugMaker:
 maker = BugMaker("localhost", "bugtracker2", "AhFeiCh2", "bugtracker2");
 maker.set_log(True);
 
+print datetime.today()
 checker1 = Checker('loogberry.com', 'maildrop@loogberry.com', 'chosen12!', maker);
 # checker1 = Checker('pop3.o2.pl', 'sp4my', 'zbc123', maker);
 
