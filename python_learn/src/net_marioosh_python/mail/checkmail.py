@@ -153,7 +153,7 @@ class BugMaker:
             "+str(self.get_user_id(email_from))+", \
             "+str(self.get_user_id(email_to))+", \
             "+str(textid)+", \
-            '[maildrop] "+subject+"', \
+            '"+subject+"', \
             NOW(), NOW())";
         print sql;
         c.execute(sql);
