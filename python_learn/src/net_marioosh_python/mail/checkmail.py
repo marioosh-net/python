@@ -134,11 +134,11 @@ class BugMaker:
             (description, \
             steps_to_reproduce, \
             additional_information) VALUES \
-            ('"+text+"', \
+            (%s, \
             '', \
             '[maildrop]')";
         print sql;
-        c.execute(sql)
+        c.execute(sql, text)
         textid = self.conn.insert_id()
 
         # tabelka mantis_bug_table (bugi)
