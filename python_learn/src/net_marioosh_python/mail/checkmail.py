@@ -43,6 +43,7 @@ class Checker:
         content = parser.Parser().parsestr("\n".join(r));
         body = [];
         att = [];
+
         for part in content.walk():
             if part.get_content_maintype() == 'multipart':
                 continue
@@ -73,7 +74,7 @@ class Checker:
             print "---HEADER---"
             print header;
             print "---HEADER END---"
-           
+          
             if len(self.checked_emails) > 0:
                 # tylko maile z listy
                 for e in self.checked_emails:
@@ -124,7 +125,7 @@ class BugMaker:
             print "ATT :"
             if len(att) > 0:
                 for a in att:
-                    print a[0]
+                    print a[0].encode('utf-8')
             print "BODY:"
             print text
 
@@ -138,7 +139,7 @@ class BugMaker:
             '', \
             '[maildrop]')";
         print sql;
-        c.execute(sql, text)
+        c.execute(sql, text);
         textid = self.conn.insert_id()
 
         # tabelka mantis_bug_table (bugi)
@@ -164,7 +165,7 @@ class BugMaker:
             # print "attachments: "+str(len(att))
             for a in att:
                 m = hashlib.md5()
-                m.update(str(a[0])+str(datetime.today()))
+                m.update(str(a[0].encode('utf-8'))+str(datetime.today()))
                 filesize = len(a[1]);
                 blob = a[1];
 
@@ -178,7 +179,7 @@ class BugMaker:
                     content) values \
                     ("+str(bugid)+", \
                     '"+m.hexdigest()+"', \
-                    '"+a[0]+"', \
+                    '"+a[0].encode('utf-8')+"', \
                     "+str(filesize)+", \
                     '"+a[2]+"', \
                     NOW(), \
